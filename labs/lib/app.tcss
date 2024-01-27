@@ -1,0 +1,49 @@
+Sidebar {
+    width: 25%;
+}
+
+#title {
+    background: $boost;
+    content-align: center middle;
+    height: 3;
+    width: 1fr;
+}
+
+#main {
+    padding: 1;
+    padding-left: 2;
+    padding-right: 2;
+}
+
+#bars-and-buttons {
+    height: 4;
+    padding-top: 1;
+    display: none;
+}
+
+#bars-and-buttons.shown {
+    display: block;
+}
+
+#loading-bar,
+#loading-bar .bar--indeterminate,
+#loading-bar .bar--bar,
+#loading-bar .bar--complete {
+    color: $foreground;
+}
+
+.success,
+#success-bar,
+#success-bar .bar--indeterminate,
+#success-bar .bar--bar,
+#success-bar .bar--complete {
+    color: $success;
+}
+
+.failure,
+#failure-bar,
+#failure-bar .bar--indeterminate,
+#failure-bar .bar--bar,
+#failure-bar .bar--complete {
+    color: $error;
+}

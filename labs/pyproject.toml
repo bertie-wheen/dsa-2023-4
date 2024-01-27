@@ -1,0 +1,19 @@
+[project]
+name = "dsa-labs"
+description = "Data Structures & Algorithms: Labs"
+requires-python = ">= 3.11"
+authors = [
+    {name = "Alessio Santamaria", email = "A.Santamaria@sussex.ac.uk"},
+    {name = "Bertie Wheen", email = "bertie@wheen.online"},
+]
+maintainers = [
+    {name = "Alessio Santamaria", email = "A.Santamaria@sussex.ac.uk"},
+    {name = "Bertie Wheen", email = "bertie@wheen.online"},
+]
+
+[project.urls]
+Repository = "https://github.com/bertie-wheen/dsa-2023-4.git"
+"Bug Tracker" = "https://github.com/bertie-wheen/dsa-2023-4/issues"
+
+[tool.black]
+line-length = 120

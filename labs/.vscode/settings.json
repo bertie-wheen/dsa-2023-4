@@ -1,0 +1,12 @@
+{
+  "search.exclude": {
+    "**/__init__.py": true,
+    "labs/__main__.py": true,
+    "labs/lib": true
+  },
+  "[python]": {
+    // "editor.defaultFormatter": "ms-python.black-formatter",
+    // "editor.formatOnSave": true,
+    "editor.tabSize": 4
+  }
+}

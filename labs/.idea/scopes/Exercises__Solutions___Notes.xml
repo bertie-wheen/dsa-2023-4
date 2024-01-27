@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Exercises, Solutions &amp; Notes" pattern="(file:*.py||file:*.md)&amp;&amp;!file:*__.py&amp;&amp;!file:lib//*" />
+</component>
