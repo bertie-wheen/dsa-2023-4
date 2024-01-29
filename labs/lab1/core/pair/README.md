@@ -87,6 +87,22 @@ by putting this on the previous line. The main point of mentioning this is that 
 `# noinspection PyProtectedMember` - in the other exercises. (A different warning, a different reason, but similarly
 we're telling PyCharm that we know what we're doing and it's okay.)
 
+Speaking of PyCharm, there's one more thing to mention about it: Occasionally, you may want to not just run the test
+suite, but load the file you're working on into the Python REPL so you can play around with it. To do this, first open
+the Python Console, which you can do by going to the top menu and selecting `Tools -> Python or Debug Console`, or by
+clicking the little Python icon in the bottom-left. Then run e.g. `from lab1.core.pair.exercise import *` (changing the
+lab number and exercise name to whatever you're working on), after which you'll be able to run things like
+```pycon
+>>> pair = Pair(2, 3)
+>>> pair.get_first()
+2
+>>> for item in pair.iterator():
+...     print(item)
+...
+2
+3
+```
+
 There are a couple of methods for you to implement to make the test framework happy - `set_second` and
 `reverse_iterator` - and then you're done! Before next lab, however, you may wish to learn some more Python, depending
 on where you're at with it. See you next week!

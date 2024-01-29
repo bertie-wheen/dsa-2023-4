@@ -155,13 +155,14 @@ def divisor_count(number: int) -> int:
 ```
 
 The `for` loop then runs the iterator until the first `yield`, at which point the value `yield`ed is assigned to the
-variable `divisor`. In this case we're not actually using this value, as we're just counting divisors, without worrying about what they are, but if we were instead summing them, instead of `count += 1` we might have
-written `divisor_sum += divisor`. After `count += 1`, the `for` loop resumes the divisors iterator, which runs
-until the next divisor is `yield`ed, which is again assigned to `divisor` and the loop body (`count += 1`) is
-re-run. This happens repeatedly until there are no more `yield`s and the iterator stops, at which point the loop
-exits and the `count` is returned.
+variable `divisor`. In this case we're not actually using this value, as we're just counting divisors, without worrying
+about what they are, but if we were instead summing them, instead of `count += 1` we might have written
+`divisor_sum += divisor`. After `count += 1`, the `for` loop resumes the divisors iterator, which runs until the next
+divisor is `yield`ed, which is again assigned to `divisor` and the loop body (`count += 1`) is re-run. This happens
+repeatedly until there are no more `yield`s and the iterator stops, at which point the loop exits and the `count` is
+returned.
 
-(Inidentally, if you're a Pythonista wondering why we wouldn't use e.g. `sum`, it's because - with a few, but very few
+(Incidentally, if you're a Pythonista wondering why we wouldn't use e.g. `sum`, it's because - with a few, but very few
 exceptions, like `range` - we're not using built-in functions in general.)
 
 In this exercise there's just one function for you to implement, and that is `is_even(number: int) -> bool`.
@@ -180,9 +181,14 @@ and similarly the second passes `is_even` some odd numbers, and checks that it r
 Currently they're failing because the function fails to return anything at all, and instead raises the exception
 `NotImplementedError`.
 
-Now, quit the tests viewer (there's a `Quit` button, or press `Q` or `Ctrl-C`), and try replacing `raise NotImplementedError` with `return True`, and re-run `python labs maths`. (Note that you can just press `Up` then `Enter` to re-run the last command.) You should see that the `even_number_is_even` test is now passing (indicated by it being green rather than red, and not being followed by a reason for failure), but that (unsurprisingly) the `odd_number_is_not_even` test is still failing (though this time for a different reason).
+Now, quit the tests viewer (there's a `Quit` button, or press `Q` or `Ctrl-C`), and try replacing
+`raise NotImplementedError` with `return True`, and re-run `python labs maths`. (Note that you can just press `Up` then
+`Enter` to re-run the last command.) You should see that the `even_number_is_even` test is now passing (indicated by it
+being green rather than red, and not being followed by a reason for failure), but that (unsurprisingly) the
+`odd_number_is_not_even` test is still failing (though this time for a different reason).
 
-Once you've figured out what the correct thing to write is, and both tests are passing, move on the next exercise, featuring a class.
+Once you've figured out what the correct thing to write is, and both tests are passing, move on the next exercise,
+featuring a class.
 
 ---
 
