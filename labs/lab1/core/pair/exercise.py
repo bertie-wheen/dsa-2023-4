@@ -8,11 +8,12 @@ Pairs Exercise
 
 
 from collections.abc import Iterator
-from typing import Generic
+
+from lib.base import Base
 from lib.type_vars import Item
 
 
-class Pair(Generic[Item]):
+class Pair(Base[Item]):
     """
     A pair of items.
 

@@ -7,7 +7,10 @@ Players Exercise
 """
 
 
-class Player:
+from lib.base import Base
+
+
+class Player(Base):
     """
     A player type.
 

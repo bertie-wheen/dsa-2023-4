@@ -3,7 +3,7 @@ import traceback
 from types import FunctionType
 from typing import Any, Optional
 
-from lib.magic import are_equal, to_string
+from lib.magic import are_equal, to_typed_string
 
 
 class TestSource:
@@ -59,9 +59,9 @@ class TestRun:
 
     def __str__(self) -> str:
         preamble = ["", *self.source.preamble] if self.source.preamble else []
-        expect = ["", self.source.expect, "# " + to_string(self.result.expect)]
+        expect = ["", self.source.expect, "# " + to_typed_string(self.result.expect)]
         setup = ["", *self.source.setup] if self.source.setup else []
-        output = ["", self.source.output, "# " + to_string(self.result.output)]
+        output = ["", self.source.output, "# " + to_typed_string(self.result.output)]
         if self.result.raised:
             traces = traceback.format_list(traceback.extract_tb(self.result.output.__traceback__)[1:])
             traces = [split for trace in traces for split in trace[:-1].split("\n")]

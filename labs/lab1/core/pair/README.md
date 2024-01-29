@@ -16,11 +16,11 @@ These data structures will contain things, but what's important is how they stru
 For example, this exercise is a `Pair` of two things - they could be two `int`s, but just as well could be two `str`s.
 By declaring the class as
 ```python
-class Pair(Generic[Item]):
+class Pair(Base[Item]):
 ```
 rather than
 ```python
-class Pair:
+class Pair(Base):
 ```
 we can then use the type variable `Item` in our type hints to describe the items it contains. (For a pair of `int`s, it
 would be `int`, etc.)

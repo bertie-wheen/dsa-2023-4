@@ -10,7 +10,7 @@ even_naturals = [
     10,
     2004,
 ]
-even_integers = [0, *even_naturals, map(lambda n: -n, even_naturals)]
+even_integers = [0, *even_naturals, *map(lambda n: -n, even_naturals)]
 
 odd_naturals = [
     1,
@@ -18,7 +18,7 @@ odd_naturals = [
     1995,
     9001,
 ]
-odd_integers = [*odd_naturals, map(lambda n: -n, odd_naturals)]
+odd_integers = [*odd_naturals, *map(lambda n: -n, odd_naturals)]
 
 
 @Test
@@ -29,7 +29,7 @@ def even_number_is_even(number):
 
 
 @Test
-@cases(*even_integers)
+@cases(*odd_integers)
 def odd_number_is_not_even(number):
     yield False
     yield is_even(number)

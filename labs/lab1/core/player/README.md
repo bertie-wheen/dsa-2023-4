@@ -48,8 +48,25 @@ We will have members be private even when none of the above applies for the sake
 both the number of Python features required, and the number of more Python-specific features used. More and more
 languages support properties, but there are still many that don't.)
 
-There are a couple of simple methods for you to implement: `Player.get_xp` and `Player.get_y`, the point of them being
-mainly to get you used to running the testing system.
+You may have noticed that at the top of the class we wrote
+```python
+class Player(Base):
+```
+rather than just
+```python
+class Player:
+```
+
+This is because we want the types we define to be convertible to strings and to be comparable for equality, but how that
+is done isn't important for the content of this module, and so we're tucking the implementation away in a superclass so
+as not to distract from the focus. It would/will be important if you decide to write more Python (in which case you
+should search for information on the `__str__` and `__eq__` magic methods), but we don't want to get bogged down by
+all of that. Additionally, this is the full extent of our use of inheritance/subclassing, i.e. basically we don't use
+it - the benefits being both that that's another thing you don't need to know to be able to do these labs, and it makes
+them more easily translatable to a wider set of other languages.
+
+As for this exercise, there are a couple of simple methods for you to implement: `Player.get_xp` and `Player.get_y`,
+the point of them being mainly to get you used to running the testing system.
 
 If you run `python labs player`, you'll see some test failures that should turn green when you implement the methods.
 
