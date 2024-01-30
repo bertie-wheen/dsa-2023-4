@@ -103,6 +103,6 @@ lab number and exercise name to whatever you're working on), after which you'll 
 3
 ```
 
-There are a couple of methods for you to implement to make the test framework happy - `set_second` and
+There are a couple of methods for you to implement to make the test framework happy - `get_second` and
 `reverse_iterator` - and then you're done! Before next lab, however, you may wish to learn some more Python, depending
 on where you're at with it. See you next week!
