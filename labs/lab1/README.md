@@ -118,7 +118,7 @@ rather the previews of them that appear e.g. on hover) properly. (They'll appear
 With all that said, PyCharm is recommended for this module, whatever you might otherwise use (unless you have
 particularly strong feelings on the matter).
 
-When opening it up, you should open the `labs/` subdirectory (that is, `C:/Users/<username>/dsa/labs/`) as a project.
+When opening it up, you should open the `labs/` subdirectory (that is, `N:/dsa/labs/`) as a project.
 
 You may then need to configure the Python interpreter. To do this, there's a little button on the right of the bottom
 status bar, or you can go to `File -> Settings` (`Ctrl-Alt-S`), then `Project: labs -> Python Interpreter`. On the lab
