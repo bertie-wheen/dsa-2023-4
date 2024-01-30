@@ -38,7 +38,25 @@ sessions, you may wish to install these on your own computer. The links are abov
 installation fairly painless, but if you do run into trouble, do try searching online, because they're very widely-used
 tools, and you're likely not the only person to have had whatever the particular problem you're having is.
 
-Having installed/activated the tools, open a terminal and enter the command
+Having installed/activated the tools, open up PowerShell.
+
+First, run
+```shell
+pip install textual
+```
+to install a dependency of the testing framework. If you're on your own computer you should only need to run this once,
+but unfortunately if you're on a lab machine you'll need to re-run it at the start of each session, after activating
+the tools from the Software Hub.
+
+If you're on a lab machine, you should also run
+```shell
+cd N:/
+```
+
+This will change your directory to the shared drive, where files will persist between sessions and across machines. To
+access this drive from home, [see this page in the UoS IT Guide](https://www.sussex.ac.uk/its/help/guide?id=49).
+
+Now, from within `N:/` (or, if you prefer, a subdirectory of it), run the command
 ```shell
 git clone https://github.com/bertie-wheen/dsa-2023-4 dsa
 ```
@@ -49,21 +67,7 @@ cd dsa
 ```
 to move into it.
 
-From this point onwards, all commands given are expected to be run from within this directory.
-
-You should also run
-```shell
-pip install textual
-```
-to install a dependency of the testing framework. If you're on your own computer you should only need to run this once,
-but unfortunately if you're on a lab machine you'll need to re-run it at the start of each session, after activating
-the tools from the Software Hub.
-
-Notice that your `dsa/` directory is in `C:/Users/<username>`. This is a local directory that is not carried over to
-other machines, and therefore at the end of a session you should copy it into OneDrive. At the start of the next
-session, you should copy it back, from OneDrive into `C:/Users/<username>`, before you continue working on it. You might
-wonder why you don't just work on it within OneDrive, but basically PyCharm won't play nicely with it when it's in
-OneDrive.
+From this point onwards, all commands given are expected to be run from within this `dsa/` directory.
 
 Another command to know is
 ```shell
@@ -72,6 +76,26 @@ git pull
 
 If you run this now it won't have any effect, but the idea is to run it once a week, after the previous lab's solutions
 and the next lab's exercises have been released, at which point it will download that new material.
+
+One note about it: If you're on a lab machine, running it will give an error, along the lines of
+```
+fatal: detected dubious ownership in repository at `//smbhome.uscs.susx.ac.uk/<username>/dsa`
+`//smbhome.uscs.susx.ac.uk/<username>/dsa` is on a file system that doesnot record ownership
+To add an exception for this directory, call:
+
+        git config --global --add safe.directory '%(prefix)///smbhome.uscs.susx.ac.uk/<username>/dsa'
+```
+
+If you do what it recommends, and run
+```shell
+git config --global --add safe.directory '%(prefix)///smbhome.uscs.susx.ac.uk/<username>/dsa'
+```
+you'll then be able to successfully
+```shell
+git pull
+```
+
+(The bad news is that you'll need to do this once per session.)
 
 Now it's time to talk about PyCharm.
 
