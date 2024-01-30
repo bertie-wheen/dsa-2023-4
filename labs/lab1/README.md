@@ -37,7 +37,9 @@ tools, and you're likely not the only person to have had whatever the particular
 
 Even the lab computers, however, need a little extra setup.
 
-The first thing to do is to open a terminal and enter the command
+First, open the Software Hub app on the lab machine. You can find it on your Desktop. Then launch "Git for Windows", "Python 3.11.3", and "PyCharm Community Edition".
+
+Next, open a terminal and enter the command
 ```shell
 git clone https://github.com/bertie-wheen/dsa-2023-4 dsa
 ```
