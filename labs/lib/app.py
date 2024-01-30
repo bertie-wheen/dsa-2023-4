@@ -34,7 +34,7 @@ class Sidebar(ScrollableContainer):
         tree.root.expand_all()
         yield tree
 
-    def select(self, path: list[str]) -> None:
+    def select(self, path: list[str], toggle: bool = False) -> None:
         tree = self.query_one(Tree)
         node = tree.root
         for part in path:
@@ -42,7 +42,8 @@ class Sidebar(ScrollableContainer):
                 if part == child.data:
                     node = child
                     break
-        # node.toggle()
+        if toggle:
+            node.toggle()
         tree.select_node(node)
         self.on_tree_node_selected(Tree.NodeSelected(node))
 
@@ -149,7 +150,7 @@ class DSAApp(App):
             return
         arg = args[0]
         path = path_for_lab(arg) if arg[0].isdigit() else path_for_exercise(arg)
-        self.query_one(Sidebar).select(path)
+        self.query_one(Sidebar).select(path, toggle=True)
 
     async def on_sidebar_selected(self, event: Sidebar.Selected) -> None:
         self.name = event.name

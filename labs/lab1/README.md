@@ -30,16 +30,15 @@ The university computers have the main tools you need already installed, namely:
 - [PyCharm (version 2023.1.1 or newer, Community Edition is fine)](https://www.jetbrains.com/pycharm/download/)
 - [Git (almost any version should work)](https://git-scm.com/downloads)
 
+To use them, at the start of each session you should open the Software Hub app (which can be found on your Desktop), and
+launch "Git for Windows", "Python 3.11.3", and "PyCharm Community Edition".
+
 Given that most of the time you spend working on these labs should be in your own time, rather than in the weekly
-sessions, you may wish to install these on your own desktop/laptop. The links are above, and hopefully you should find
+sessions, you may wish to install these on your own computer. The links are above, and hopefully you should find
 installation fairly painless, but if you do run into trouble, do try searching online, because they're very widely-used
 tools, and you're likely not the only person to have had whatever the particular problem you're having is.
 
-Even the lab computers, however, need a little extra setup.
-
-First, open the Software Hub app on the lab machine. You can find it on your Desktop. Then launch "Git for Windows", "Python 3.11.3", and "PyCharm Community Edition".
-
-Next, open a terminal and enter the command
+Having installed/activated the tools, open a terminal and enter the command
 ```shell
 git clone https://github.com/bertie-wheen/dsa-2023-4 dsa
 ```
@@ -51,24 +50,30 @@ cd dsa
 to move into it.
 
 From this point onwards, all commands given are expected to be run from within this directory.
-When you open a new terminal, though you don't need to `git clone` again, you should re-`cd`.
 
-The first command to note is
+You should also run
+```shell
+pip install textual
+```
+to install a dependency of the testing framework. If you're on your own computer you should only need to run this once,
+but unfortunately if you're on a lab machine you'll need to re-run it at the start of each session, after activating
+the tools from the Software Hub.
+
+Notice that your `dsa/` directory is in `C:/Users/<username>`. This is a local directory that is not carried over to
+other machines, and therefore at the end of a session you should copy it into OneDrive. At the start of the next
+session, you should copy it back, from OneDrive into `C:/Users/<username>`, before you continue working on it. You might
+wonder why you don't just work on it within OneDrive, but basically PyCharm won't play nicely with it when it's in
+OneDrive.
+
+Another command to know is
 ```shell
 git pull
 ```
 
 If you run this now it won't have any effect, but the idea is to run it once a week, after the previous lab's solutions
-and the next lab's exercises have been released, and it will then download that new material.
+and the next lab's exercises have been released, at which point it will download that new material.
 
-A command to be run now (and that needn't be run again) is
-```shell
-pip install textual
-```
-
-This will download and install a dependency of the testing framework.
-
-Having done that, it's time to talk about PyCharm.
+Now it's time to talk about PyCharm.
 
 First, it's worth mentioning that you don't _have_ to use it. _However_, if the reason you don't want to use PyCharm is
 because you live in Vim, note that there is a plugin
@@ -89,11 +94,12 @@ rather the previews of them that appear e.g. on hover) properly. (They'll appear
 With all that said, PyCharm is recommended for this module, whatever you might otherwise use (unless you have
 particularly strong feelings on the matter).
 
-When opening it up, you should open the `labs/` subdirectory as a project.
+When opening it up, you should open the `labs/` subdirectory (that is, `C:/Users/<username>/dsa/labs/`) as a project.
 
 You may then need to configure the Python interpreter. To do this, there's a little button on the right of the bottom
-status bar, or you can go to `File -> Settings` (`Ctrl-Alt-S`), then `Project: labs -> Python Interpreter`. If it is not
-already added, you should add the Python that's installed on your system.
+status bar, or you can go to `File -> Settings` (`Ctrl-Alt-S`), then `Project: labs -> Python Interpreter`. On the lab
+machines it may have Python 3.9 configured by default, so you should set it to use 3.11 instead.
+(`Add Interpreter -> Add Local Interpreter -> System Interpreter`.)
 
 Returning to the main IDE, you should look to the top-left, where it says `Project`. This is called a scope, and if you
 click on it, then you'll see others, including two especially for this module. If you select `Exercises & Solutions`,

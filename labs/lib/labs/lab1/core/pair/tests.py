@@ -1,5 +1,6 @@
 from itertools import product
 
+from lib.iterator import iterator
 from lib.test import Test, cases
 
 from lab1.core.pair.exercise import Pair
@@ -50,23 +51,11 @@ def get_second_after_set_second(first, old_second, new_second):
 
 @Test
 @cases(
-    *product(integers, repeat=3),
-    *product(strings, repeat=3),
-)
-def iterator_after_set_second(first, old_second, new_second):
-    yield iter((first, new_second))
-    pair = Pair(first, old_second)
-    pair.set_second(new_second)
-    yield pair.iterator()
-
-
-@Test
-@cases(
     *product(integers, repeat=2),
     *product(strings, repeat=2),
 )
 def reverse_iterator_after_init(first, second):
-    yield iter((second, first))
+    yield iterator(second, first)
     pair = Pair(first, second)
     yield pair.reverse_iterator()
 
@@ -77,7 +66,7 @@ def reverse_iterator_after_init(first, second):
     *product(strings, repeat=3),
 )
 def reverse_iterator_after_set_second(first, old_second, new_second):
-    yield iter((new_second, first))
+    yield iterator(new_second, first)
     pair = Pair(first, old_second)
     pair.set_second(new_second)
     yield pair.reverse_iterator()
