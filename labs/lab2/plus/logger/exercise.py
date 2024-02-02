@@ -3,7 +3,7 @@ Data Structures & Algorithms
 
 Lab 2: Lists
 
-Logger Exercise
+Loggers Exercise
 """
 
 
