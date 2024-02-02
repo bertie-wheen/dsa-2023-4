@@ -174,25 +174,22 @@ class DSAApp(App):
         was_success = False
         for name, test in tests.items():
             failure = test.run()
-            is_success = failure is None
-            if is_success:
-                if not (was_first or was_success):
-                    await test_results.mount(Rule())
-                await test_results.mount(Label(name, classes="success"))
-            else:
+            if failure:
                 if not was_first:
                     await test_results.mount(Rule())
                 await test_results.mount(
                     Label(name, classes="failure"),
-                    Label(str(failure)),
+                    Label(failure),
                 )
-            loading_bar.advance()
-            if is_success:
-                success_bar.advance()
-            else:
                 failure_bar.advance()
+            else:
+                if not (was_first or was_success):
+                    await test_results.mount(Rule())
+                await test_results.mount(Label(name, classes="success"))
+                success_bar.advance()
+            loading_bar.advance()
             was_first = False
-            was_success = is_success
+            was_success = not failure
 
     @on(Button.Pressed, "#quit")
     def action_quit(self) -> None:

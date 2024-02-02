@@ -79,7 +79,7 @@ as there aren't any plus exercises).
 
 You can additionally select items in the sidebar to run the corresponding tests.
 
-Once you've got all greens for this `player` exercise, there's only one more exercise to do this lab.
+Once you've got all greens for this `player` exercise, there's only one more exercise to do this lab!
 
 ---
 

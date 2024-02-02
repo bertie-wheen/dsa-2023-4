@@ -39,5 +39,3 @@ def plus_exercises(lab_number):
 
 
 resources_dir = labs_dir / "lib" / "resources"
-
-python_ascii_counts_file = resources_dir / "python_ascii_counts.txt"

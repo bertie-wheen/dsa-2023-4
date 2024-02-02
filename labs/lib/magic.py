@@ -1,27 +1,158 @@
-from collections.abc import Callable, Iterable, Iterator
+from collections.abc import Callable, Generator, Iterable, Iterator
+from contextlib import contextmanager
+from copy import copy
+from enum import Enum
+from types import NoneType
 from typing import Any
 
+from lib.type_vars import Item
 
-def to_type_string(thing: Any) -> str:
+
+def indent_line(line: str) -> str:
+    if line == "":
+        return ""
+    return "    " + line
+
+
+def indented(s: str) -> str:
+    return "\n".join(map(indent_line, s.split("\n")))
+
+
+def indent_lines(lines: Iterable[str]) -> str:
+    return indented("\n".join(lines))
+
+
+def prepend_newline_unless_empty(s: str) -> str:
+    if s == "":
+        return ""
+    return "\n" + s
+
+
+def to_type_name(thing: Any) -> str:
     if isinstance(thing, Iterator):
         return "Iterator"
     return type(thing).__name__
 
 
+def needs_no_id(thing):
+    thing_type = type(thing)
+    if thing_type is NoneType:
+        return True
+    if thing_type is bool:
+        return True
+    if thing_type is int:
+        return True
+    if thing_type is float:
+        return True
+    if thing_type is str:
+        return True
+    if issubclass(thing_type, Exception):
+        return True
+    if issubclass(thing_type, Iterator):
+        return True
+    return False
+
+
+def is_shallow(thing):
+    if needs_no_id(thing):
+        return True
+    # if type(thing) is str:
+    #     return True
+    return False
+
+
+def to_type_string(thing: Any) -> str:
+    type_name = to_type_name(thing)
+    if needs_no_id(thing):
+        return type_name
+    return f"{type_name}@{hex(id(thing))}"
+
+
+def to_shallow_string(thing: Any) -> str:
+    return to_string(thing) if is_shallow(thing) else "..."
+
+
+def to_typed_shallow_string(thing: Any) -> str:
+    return f"{to_type_string(thing)}{{{to_shallow_string(thing)}}}"
+
+
+def mappings_to_string(mappings: Iterable[tuple[str, str]]) -> str:
+    return prepend_newline_unless_empty(indent_lines(f"{key} = {value}" for key, value in mappings))
+
+
 def members_to_string(thing: Any, *members: str) -> str:
-    return ", ".join(f"{member} = {to_typed_string(getattr(thing, member))}" for member in members)
+    return mappings_to_string((member, to_typed_string(getattr(thing, member))) for member in members)
 
 
+def to_repr(thing: Any) -> str:
+    if isinstance(thing, Iterator):
+        if isinstance(thing, Generator):
+            items = "..."
+        else:
+            items = ", ".join(to_repr(item) for item in copy(thing))
+        return f"iterator({items})"
+    return repr(thing)
+
+
+def is_in(thing: Item, things: Iterable[Item]) -> bool:
+    for thing_ in things:
+        if thing is thing_:
+            return True
+    return False
+
+
+# noinspection PyProtectedMember
 def to_string(thing: Any) -> str:
-    if hasattr(thing, "to_string"):
-        return thing.to_string()
     match type(thing).__name__:
         case "Player":
-            return members_to_string(thing, "_xp", "_position")
+            return members_to_string(thing, "xp", "position")
+        case "Log":
+            return "".join("\n" + item for item in thing.iterator())
+        case "LogItem":
+            return members_to_string(thing, "time", "level", "message")
+        case "SinglyLinkedList" | "DoublyLinkedList":
+            visited_nodes = []
+            node_strings = []
+            for node in thing.nodes_iterator():
+                node_strings.append(to_typed_string(node))
+                if is_in(node, visited_nodes):
+                    node_strings.append("...")
+                    break
+                visited_nodes.append(node)
+            nodes = prepend_newline_unless_empty(indent_lines(node_strings))
+            return mappings_to_string(
+                {
+                    "length": to_typed_string(thing._length),
+                    "first_node": to_typed_shallow_string(thing._first_node),
+                    "last_node": to_typed_shallow_string(thing._last_node),
+                    "nodes": nodes,
+                }.items()
+            )
+        case "SinglyLinkedNode":
+            return mappings_to_string(
+                {
+                    "list": to_typed_shallow_string(thing._list),
+                    "item": to_typed_string(thing._item),
+                    "next_node": to_typed_shallow_string(thing._next_node),
+                }.items()
+            )
+        case "DoublyLinkedNode":
+            return mappings_to_string(
+                {
+                    "list": to_typed_shallow_string(thing._list),
+                    "previous_node": to_typed_shallow_string(thing._previous_node),
+                    "item": to_typed_string(thing._item),
+                    "next_node": to_typed_shallow_string(thing._next_node),
+                }.items()
+            )
+    if isinstance(thing, Enum):
+        return thing.name.title().replace("_", " ")
     if hasattr(thing, "iterator") and isinstance(thing.iterator, Callable):
         return ", ".join(map(to_typed_string, thing.iterator()))
     if isinstance(thing, str):
         return repr(thing)
+    if isinstance(thing, Iterator) and not isinstance(thing, Generator):
+        return ", ".join(map(to_typed_string, copy(thing)))
     if isinstance(thing, Iterable):
         return ", ".join(map(to_typed_string, thing))
     return str(thing)
@@ -44,12 +175,27 @@ def are_equal(thing_a: Any, thing_b: Any) -> bool:
     if isinstance(thing_a, Iterator):
         if not isinstance(thing_b, Iterator):
             return False
-        return all(are_equal(a, b) for a, b in zip(thing_a, thing_b))
+        if not isinstance(thing_a, Generator):
+            thing_a = copy(thing_a)
+        return all(are_equal(a, b) for a, b in zip(thing_a, thing_b, strict=True))
     if type(thing_a) is not type(thing_b):
         return False
+    if isinstance(thing_a, Enum):
+        return thing_a.value == thing_b.value
     match type(thing_a).__name__:
-        case "Pair":
-            return members_are_equal(thing_a, thing_b, "_first", "_second")
         case "Player":
-            return members_are_equal(thing_a, thing_b, "_xp", "_position")
+            return members_are_equal(thing_a, thing_b, "xp", "position")
+        case "Pair":
+            return members_are_equal(thing_a, thing_b, "first", "second")
+        case "Log":
+            return members_are_equal(thing_a, thing_b, "log")
+        case "LogItem":
+            return members_are_equal(thing_a, thing_b, "time", "level", "message")
+        case "SinglyLinkedNode" | "DoublyLinkedNode":
+            return thing_a is thing_b
+            # return members_are_equal(thing_a, thing_b, "item")
+    # if isinstance(thing_a, Iterable):
+    #     return are_equal(iter(thing_a), iter(thing_b))
+    if hasattr(thing_a, "iterator") and isinstance(thing_a.iterator, Callable):
+        return are_equal(thing_a.iterator(), thing_b.iterator())
     return thing_a == thing_b

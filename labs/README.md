@@ -4,7 +4,7 @@ python labs
 ```
 
  1. [Getting Ready](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab1/README.md)
- 2. Lists
+ 2. [Lists](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab2/README.md)
  3. More Lists, Stacks & Queues
  4. Hash Maps & Sets
  5. Binary Trees & Traversals
@@ -17,7 +17,7 @@ python labs
 
 There are 11 labs, corresponding one-to-one with the 11 weeks of this module.
 
-The first lab is simply a setting-up guide for you and your coputer, to be done in readiness for the labs ahead.
+The first lab is simply a setting-up guide for you and your computer, to be done in readiness for the labs ahead.
 
 From the second lab onwards, they consist of exercises in which data structures and algorithms covered in lectures the
 week before have been partially implemented, with the goal being for you to figure out how to complete them.
