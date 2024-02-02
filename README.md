@@ -1,6 +1,6 @@
 # [Data Structures & Algorithms](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/README.md)
 
-This repository contains slides, code and notes for the 2023-2024 presentation of the Data Structures & Algorithms
+This repository contains the code and notes for labs of the 2023-2024 presentation of the Data Structures & Algorithms
 module at the University of Sussex.
 
 ## Lectures
