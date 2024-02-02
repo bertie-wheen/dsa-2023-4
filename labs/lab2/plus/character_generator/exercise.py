@@ -1,3 +1,12 @@
+"""
+Data Structures & Algorithms
+
+Lab 2: Lists
+
+Character Generator Exercise
+"""
+
+
 from enum import Enum
 
 from lib.base import Base

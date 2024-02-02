@@ -1,3 +1,12 @@
+"""
+Data Structures & Algorithms
+
+Lab 2: Lists
+
+Logger Exercise
+"""
+
+
 from collections.abc import Iterator
 from enum import Enum
 
