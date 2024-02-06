@@ -7,7 +7,7 @@ python labs 2*
 
 If you haven't gone through [lab 1](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab1/README.md),
 then make sure to read through what it says about getting your system ready for working on these labs. As a reminder, if
-you're an a lab machine you'll need to first:
+you're on a lab machine you'll need to first:
 - Open the Software Hub and launch:
   - Python 3.11.3
   - PyCharm Community Edition
@@ -28,7 +28,8 @@ you're an a lab machine you'll need to first:
       - Then again run `git pull`
 
 There's a great setup guide (thanks to Joshua Kybett) about all of this (with screenshots and extra tips) available on
-Canvas, which is worth a read-through (particularly if you don't understand a step or are having problems).
+Canvas, which is worth a read-through (particularly if you don't understand a step or are having problems). There's
+also a Mac-specific guide on Canvas for those of you who need it (thanks to Val Knight).
 
 ---
 
