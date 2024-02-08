@@ -63,7 +63,7 @@ c
 
 ---
 
-Another quick reminder before starting this second lab: you are expected to do the core exercises, but if, having done
+One more quick reminder before starting this second lab: you are expected to do the core exercises, but if, having done
 them, you find that you'd be up for a little extra, there are optional "plus" exercises that you might like to have a
 look/go at. They're not actually harder, at least usually - admittedly there are one or two Python features that they
 use (particularly `Enum`s and `match` statements) that the core exercises don't, but the point of them is interest and
