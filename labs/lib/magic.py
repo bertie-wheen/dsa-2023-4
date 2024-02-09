@@ -1,5 +1,4 @@
 from collections.abc import Callable, Generator, Iterable, Iterator
-from contextlib import contextmanager
 from copy import copy
 from enum import Enum
 from types import NoneType
@@ -50,14 +49,33 @@ def needs_no_id(thing):
         return True
     if issubclass(thing_type, Iterator):
         return True
+    if issubclass(thing_type, Enum):
+        return True
+    if thing_type.__name__.endswith("Token"):
+        return True
     return False
 
 
 def is_shallow(thing):
-    if needs_no_id(thing):
+    thing_type = type(thing)
+    if thing_type is NoneType:
         return True
-    # if type(thing) is str:
-    #     return True
+    if thing_type is bool:
+        return True
+    if thing_type is int:
+        return True
+    if thing_type is float:
+        return True
+    if thing_type is str:
+        return True
+    if issubclass(thing_type, Exception):
+        return True
+    if issubclass(thing_type, Iterator):
+        return True
+    if issubclass(thing_type, Enum):
+        return True
+    if thing_type.__name__.endswith("Token"):
+        return True
     return False
 
 
@@ -85,6 +103,8 @@ def members_to_string(thing: Any, *members: str) -> str:
 
 
 def to_repr(thing: Any) -> str:
+    if hasattr(thing, "iterator") and callable(thing.iterator):
+        return f"{type(thing).__name__}.build({to_repr(iter(list(thing.iterator())))})"
     if isinstance(thing, Iterator):
         if isinstance(thing, Generator):
             items = "..."
@@ -145,6 +165,38 @@ def to_string(thing: Any) -> str:
                     "next_node": to_typed_shallow_string(thing._next_node),
                 }.items()
             )
+        case "Parenthesis":
+            match thing.name:
+                case "OPENING":
+                    return "("
+                case "CLOSING":
+                    return ")"
+            assert False
+        case "Operator":
+            match thing.name:
+                case "ADDITION":
+                    return "+"
+                case "SUBTRACTION":
+                    return "-"
+                case "MULTIPLICATION":
+                    return "*"
+                case "DIVISION":
+                    return "/"
+                case "MODULO":
+                    return "%"
+                case "EXPONENTIATION":
+                    return "^"
+            assert False
+        case "ValueToken":
+            return to_string(thing.value)
+        case "FunctionToken":
+            return to_string(thing.name)
+        case "OperatorToken":
+            return to_string(thing.operator)
+        case "ParenthesisToken":
+            return to_string(thing.parenthesis)
+        case "CommaToken":
+            return ""
     if isinstance(thing, Enum):
         return thing.name.title().replace("_", " ")
     if hasattr(thing, "iterator") and isinstance(thing.iterator, Callable):
@@ -154,7 +206,8 @@ def to_string(thing: Any) -> str:
     if isinstance(thing, Iterator) and not isinstance(thing, Generator):
         return ", ".join(map(to_typed_string, copy(thing)))
     if isinstance(thing, Iterable):
-        return ", ".join(map(to_typed_string, thing))
+        return "..."
+        # return ", ".join(map(to_typed_string, thing))
     return str(thing)
 
 
@@ -177,7 +230,10 @@ def are_equal(thing_a: Any, thing_b: Any) -> bool:
             return False
         if not isinstance(thing_a, Generator):
             thing_a = copy(thing_a)
-        return all(are_equal(a, b) for a, b in zip(thing_a, thing_b, strict=True))
+        try:
+            return all(are_equal(a, b) for a, b in zip(thing_a, thing_b, strict=True))
+        except ValueError:
+            return False
     if type(thing_a) is not type(thing_b):
         return False
     if isinstance(thing_a, Enum):
@@ -194,6 +250,16 @@ def are_equal(thing_a: Any, thing_b: Any) -> bool:
         case "SinglyLinkedNode" | "DoublyLinkedNode":
             return thing_a is thing_b
             # return members_are_equal(thing_a, thing_b, "item")
+        case "ValueToken":
+            return members_are_equal(thing_a, thing_b, "value")
+        case "FunctionToken":
+            return members_are_equal(thing_a, thing_b, "name")
+        case "OperatorToken":
+            return members_are_equal(thing_a, thing_b, "operator")
+        case "ParenthesisToken":
+            return members_are_equal(thing_a, thing_b, "parenthesis")
+        case "CommaToken":
+            return True
     # if isinstance(thing_a, Iterable):
     #     return are_equal(iter(thing_a), iter(thing_b))
     if hasattr(thing_a, "iterator") and isinstance(thing_a.iterator, Callable):

@@ -1,16 +1,15 @@
-from importlib import import_module
 import sys
-from types import ModuleType
+from typing import Optional
 
 from textual import on
 from textual.app import App, ComposeResult
 from textual.containers import Container, Horizontal, ScrollableContainer
 from textual.message import Message
 from textual.widgets import Button, Footer, Label, ProgressBar, Rule, Tree
+from textual.widgets.tree import TreeNode
 
-from lib.labs import path_for_lab, path_for_exercise
-from lib.resources import lab_numbers, core_exercises, plus_exercises
-from lib.test import Test
+from lib.labs import LABS, Lab, LabExercises, Exercise
+from lib.test.runner import TestRunner
 
 
 class Sidebar(ScrollableContainer):
@@ -21,54 +20,79 @@ class Sidebar(ScrollableContainer):
     ]
 
     def compose(self) -> ComposeResult:
-        tree: Tree[dict] = Tree("DSA Labs")
+        tree: Tree[dict] = Tree("DSA Labs", data=LABS)
         tree.guide_depth = 3
-        for lab_number in lab_numbers:
-            lab_tree = tree.root.add(f"Lab {lab_number}", data=f"lab{lab_number}")
-            core_tree = lab_tree.add("Core", data="core")
-            plus_tree = lab_tree.add("Plus", data="plus")
-            for core_exercise in core_exercises(lab_number):
-                core_tree.add_leaf(core_exercise, data=core_exercise)
-            for plus_exercise in plus_exercises(lab_number):
-                plus_tree.add_leaf(plus_exercise, data=plus_exercise)
+        for lab in LABS:
+            lab_tree = tree.root.add(lab.name, data=lab)
+            for exercises in lab:
+                exercises_tree = lab_tree.add(exercises.name, data=exercises)
+                for exercise in exercises:
+                    exercises_tree.add_leaf(exercise.name, data=exercise)
         tree.root.expand_all()
         yield tree
 
-    def select(self, path: list[str], toggle: bool = False) -> None:
-        tree = self.query_one(Tree)
-        node = tree.root
-        for part in path:
-            for child in node.children:
-                if part == child.data:
-                    node = child
-                    break
+    def select_node(self, node: TreeNode, toggle: bool = False) -> None:
         if toggle:
             node.toggle()
-        tree.select_node(node)
+        node.tree.select_node(node)
         self.on_tree_node_selected(Tree.NodeSelected(node))
+
+    def get_lab_node(self, lab: Lab) -> TreeNode:
+        tree = self.query_one(Tree)
+        for lab_node in tree.root.children:
+            if lab_node.data.id == lab.id:
+                return lab_node
+        raise KeyError
+
+    def select_lab(self, lab: Lab, toggle: bool = False) -> None:
+        self.select_node(self.get_lab_node(lab), toggle=toggle)
+
+    def get_exercises_node(self, exercises: LabExercises) -> TreeNode:
+        tree = self.query_one(Tree)
+        for lab_node in tree.root.children:
+            if lab_node.data.id == exercises.lab.id:
+                for exercises_node in lab_node.children:
+                    if exercises_node.data.id == exercises.id:
+                        return exercises_node
+        raise KeyError
+
+    def select_exercises(self, exercises: LabExercises, toggle: bool = False) -> None:
+        self.select_node(self.get_exercises_node(exercises), toggle=toggle)
+
+    def get_exercise_node(self, exercise: Exercise) -> TreeNode:
+        tree = self.query_one(Tree)
+        for lab_node in tree.root.children:
+            for exercises_node in lab_node.children:
+                for exercise_node in exercises_node.children:
+                    if exercise_node.data.id == exercise.id:
+                        return exercise_node
+        raise KeyError
+
+    def select_exercise(self, exercise: Exercise, toggle: bool = False) -> None:
+        self.select_node(self.get_exercise_node(exercise), toggle=toggle)
+
+    def get_node(self, full_id: str, root: Optional[TreeNode] = None) -> Optional[TreeNode]:
+        if root is None:
+            tree = self.query_one(Tree)
+            return self.get_node(full_id, root=tree.root)
+        if root.data.full_id == full_id:
+            return root
+        for child in root.children:
+            node = self.get_node(full_id, root=child)
+            if node is not None:
+                return node
+        return None
+
+    def select(self, full_id: str, toggle: bool = False) -> TreeNode:
+        node = self.get_node(full_id)
+        if node is not None:
+            self.select_node(node, toggle=toggle)
+        return node
 
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
         node = event.node
         node.toggle()
-        nodes = []
-        while node.parent is not None:
-            nodes.append(node)
-            node = node.parent
-        nodes.reverse()
-        name = [str(node.label) for node in nodes]
-        path = [node.data for node in nodes]
-        match name:
-            case []:
-                name = "Overall"
-            case [lab_name]:
-                name = lab_name
-            case [lab_name, core_or_plus]:
-                name = f"{lab_name} ({core_or_plus})"
-            case [lab_name, core_or_plus, exercise_name]:
-                name = f"{lab_name} ({core_or_plus}): {exercise_name} exercise"
-            case _:
-                assert False
-        self.post_message(self.Selected(name, path))
+        self.post_message(self.Selected(node))
 
     def action_show_all(self) -> None:
         root = self.query_one(Tree).root
@@ -90,27 +114,15 @@ class Sidebar(ScrollableContainer):
             lab_tree.expand()
 
     class Selected(Message):
-        def __init__(self, name: str, path: list[str]) -> None:
+        _node: TreeNode
+
+        def __init__(self, node: TreeNode) -> None:
             super().__init__()
-            self.name = name
-            self.path = path
+            self._node = node
 
-
-def _get_tests(module: ModuleType) -> dict[str, Test]:
-    tests = {}
-    for name, thing in module.__dict__.items():
-        if isinstance(thing, Test):
-            tests[name] = thing
-        elif isinstance(thing, ModuleType):
-            for test_name, test in _get_tests(thing).items():
-                tests[f"{name}.{test_name}"] = test
-    return tests
-
-
-def get_tests(path: list) -> dict[str, Test]:
-    module_name = f"lib.labs{''.join('.' + part for part in path)}.tests"
-    loaded_module = import_module(module_name)
-    return _get_tests(loaded_module)
+        @property
+        def node(self) -> TreeNode:
+            return self._node
 
 
 class DSAApp(App):
@@ -130,7 +142,7 @@ class DSAApp(App):
                 yield Label("Select a lab or exercise from the sidebar", id="title")
                 with Container(id="main"):
                     yield ScrollableContainer(id="test-results")
-                    with Horizontal(id="bars-and-buttons"):
+                    with Horizontal(id="runs-info"):
                         with Container(id="bars"):
                             with Horizontal(id="loading-bar"):
                                 yield Label("Running: ")
@@ -141,6 +153,9 @@ class DSAApp(App):
                             with Horizontal(id="failure-bar"):
                                 yield Label("Failure: ")
                                 yield ProgressBar(show_eta=False)
+                        with Container(id="status-labels"):
+                            yield Label("All tests ran successfully!", id="all-success")
+                            yield Label("Some tests failed.", id="some-failure")
                         yield Button("Quit", id="quit")
         yield Footer()
 
@@ -149,18 +164,36 @@ class DSAApp(App):
         if len(args) != 1:
             return
         arg = args[0]
-        path = path_for_lab(arg) if arg[0].isdigit() else path_for_exercise(arg)
-        self.query_one(Sidebar).select(path, toggle=True)
+        sidebar = self.query_one(Sidebar)
+        if arg[0].isdigit():
+            try:
+                week = int(arg)
+                lab = LABS[week]
+                sidebar.select_exercises(lab.core, toggle=True)
+            except ValueError:
+                week = int(arg[:-1])
+                lab = LABS[week]
+                match arg[-1]:
+                    case "*":
+                        sidebar.select_lab(lab, toggle=True)
+                    case "+":
+                        sidebar.select_exercises(lab.plus, toggle=True)
+        else:
+            sidebar.select_exercise(LABS.exercise(arg))
+
+    def update_title(self, node: TreeNode) -> None:
+        self.query_one("#title").update(node.data.full_name)
 
     async def on_sidebar_selected(self, event: Sidebar.Selected) -> None:
-        self.name = event.name
-        self.path = event.path
-        await self.run_tests()
+        node = event.node
+        self.update_title(node)
+        await self.run_tests(node)
 
-    async def run_tests(self) -> None:
-        self.query_one("#title").update(self.name)
-        self.query_one("#bars-and-buttons").add_class("shown")
-        tests = get_tests(self.path)
+    async def run_tests(self, node: TreeNode) -> None:
+        self.query_one("#all-success").remove_class("shown")
+        self.query_one("#some-failure").remove_class("shown")
+        self.query_one("#runs-info").add_class("shown")
+        tests = node.data.tests
         total = len(tests)
         loading_bar = self.query_one("#loading-bar").query_one(ProgressBar)
         loading_bar.update(progress=0, total=total)
@@ -172,15 +205,19 @@ class DSAApp(App):
         await test_results.remove_children()
         was_first = True
         was_success = False
-        for name, test in tests.items():
-            failure = test.run()
-            if failure:
+        all_success = True
+        min_time_ms = 25
+        max_time_ms = None
+        runner = TestRunner(min_time_ms, max_time_ms=max_time_ms)
+        for name, test in tests:
+            failure_reason = runner.run(test)
+            if failure_reason:
+                if all_success:
+                    all_success = False
+                    self.query_one("#some-failure").add_class("shown")
                 if not was_first:
                     await test_results.mount(Rule())
-                await test_results.mount(
-                    Label(name, classes="failure"),
-                    Label(failure),
-                )
+                await test_results.mount(Label(name, classes="failure"), Label(failure_reason))
                 failure_bar.advance()
             else:
                 if not (was_first or was_success):
@@ -189,7 +226,9 @@ class DSAApp(App):
                 success_bar.advance()
             loading_bar.advance()
             was_first = False
-            was_success = not failure
+            was_success = not failure_reason
+        if all_success:
+            self.query_one("#all-success").add_class("shown")
 
     @on(Button.Pressed, "#quit")
     def action_quit(self) -> None:

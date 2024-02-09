@@ -15,13 +15,40 @@ Sidebar {
     padding-right: 2;
 }
 
-#bars-and-buttons {
+#runs-info {
     height: 4;
     padding-top: 1;
+    content-align: center middle;
+}
+
+#runs-info,
+#all-success,
+#some-failure {
     display: none;
 }
 
-#bars-and-buttons.shown {
+#bars {
+    width: 46;
+}
+
+#status-labels {
+    padding: 1;
+    padding-left: 3;
+}
+
+#status-labels,
+#status-labels > Label {
+    width: 1fr;
+    height: 1fr;
+}
+
+#status-labels > Label {
+    content-align: left middle;
+}
+
+#runs-info.shown,
+#all-success.shown,
+#some-failure.shown {
     display: block;
 }
 
@@ -33,6 +60,7 @@ Sidebar {
 }
 
 .success,
+#all-success,
 #success-bar,
 #success-bar .bar--indeterminate,
 #success-bar .bar--bar,
@@ -41,6 +69,7 @@ Sidebar {
 }
 
 .failure,
+#some-failure,
 #failure-bar,
 #failure-bar .bar--indeterminate,
 #failure-bar .bar--bar,

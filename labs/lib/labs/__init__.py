@@ -1,25 +1,248 @@
-# from . import tests
-from lib.resources import labs_dir
+from collections.abc import Iterator
+from importlib import import_module
+from typing import Optional
+
+from lib.test import Test
+from lib.test.suite import TestSuite
 
 
-def path_for_lab(lab):
-    match lab[-1]:
-        case "*":
-            return ["lab" + lab[:-1]]
-        case "+":
-            return ["lab" + lab[:-1], "plus"]
-        case _:
-            return ["lab" + lab, "core"]
+class Labs:
+    _labs: list["Lab"]
+
+    def __init__(self, *labs) -> None:
+        self._labs = [Lab(self, week, core, plus) for week, (core, plus) in enumerate(labs, start=1)]
+
+    @property
+    def full_id(self) -> str:
+        return "labs"
+
+    @property
+    def tests(self) -> TestSuite:
+        return TestSuite((f"{lab.id}.{test_name}", test) for lab in self for test_name, test in lab.tests)
+
+    @property
+    def name(self) -> str:
+        return "Labs"
+
+    @property
+    def full_name(self) -> str:
+        return "Overall"
+
+    def __getitem__(self, week: int) -> "Lab":
+        return self._labs[week - 1]
+
+    def __len__(self) -> int:
+        return len(self._labs)
+
+    def __iter__(self) -> Iterator["Lab"]:
+        return iter(self._labs)
+
+    # def exercises(self, exercises_full_id: str) -> LabExercises:
+    #     for lab in self:
+    #         for exercises in lab:
+    #             if exercises.full_id == exercises_full_id:
+    #                 return exercises
+    #     raise KeyError
+
+    def exercise(self, exercise_id: str) -> "Exercise":
+        for lab in self:
+            for exercises in lab:
+                for exercise in exercises:
+                    if exercise.id == exercise_id:
+                        return exercise
+        raise KeyError
+
+    def test(self, test_full_id: str) -> Test:
+        for full_id, test in self.tests:
+            if full_id == test_full_id:
+                return test
+        raise KeyError
 
 
-def path_for_exercise(exercise):
-    for labs_item in labs_dir.iterdir():
-        if labs_item.name.startswith("lab"):
-            lab = labs_item.name
-            for lab_item in labs_item.iterdir():
-                if lab_item.name in ["core", "plus"]:
-                    core_or_plus = lab_item.name
-                    for item in lab_item.iterdir():
-                        if item.name == exercise:
-                            return [lab, core_or_plus, exercise]
-    raise ValueError
+class Lab:
+    _labs: Labs
+    _week: int
+    _core: "LabExercises"
+    _plus: "LabExercises"
+
+    def __init__(self, labs: Labs, week: int, core, plus) -> None:
+        self._labs = labs
+        self._week = week
+        self._core = LabExercises(self, True, *core)
+        self._plus = LabExercises(self, False, *plus)
+
+    @property
+    def week(self) -> int:
+        return self._week
+
+    @property
+    def name(self) -> str:
+        return f"Lab {self.week}"
+
+    @property
+    def full_name(self) -> str:
+        return self.name
+
+    @property
+    def id(self) -> str:
+        return f"lab{self.week}"
+
+    @property
+    def full_id(self) -> str:
+        return f"{self._labs.full_id}.{self.id}"
+
+    @property
+    def core(self) -> "LabExercises":
+        return self._core
+
+    @property
+    def plus(self) -> "LabExercises":
+        return self._plus
+
+    @property
+    def tests(self) -> TestSuite:
+        return TestSuite(
+            (f"{exercises.id}.{test_name}", test) for exercises in self for test_name, test in exercises.tests
+        )
+
+    def __len__(self):
+        return len(self._core) + len(self._plus)
+
+    def __iter__(self) -> Iterator["LabExercises"]:
+        yield self._core
+        yield self._plus
+
+
+class LabExercises:
+    _lab: Lab
+    _is_core: bool
+    _exercises: list["Exercise"]
+
+    def __init__(self, lab: Lab, is_core: bool, *exercises: str) -> None:
+        self._lab = lab
+        self._is_core = is_core
+        self._exercises = [Exercise(self, exercise) for exercise in exercises]
+
+    @property
+    def is_core(self) -> bool:
+        return self._is_core
+
+    @property
+    def lab(self) -> str:
+        return self._lab
+
+    @property
+    def id(self) -> str:
+        return "core" if self.is_core else "plus"
+
+    @property
+    def full_id(self) -> str:
+        return f"{self._lab.full_id}.{self.id}"
+
+    @property
+    def name(self) -> str:
+        return "Core" if self.is_core else "Plus"
+
+    @property
+    def full_name(self) -> str:
+        return f"{self.lab.name} ({self.name})"
+
+    @property
+    def tests(self) -> TestSuite:
+        return TestSuite(
+            (f"{exercise.id}.{test_name}", test) for exercise in self for test_name, test in exercise.tests
+        )
+
+    def __len__(self):
+        return sum(map(len, self._exercises))
+
+    def __iter__(self):
+        return iter(self._exercises)
+
+
+class Exercise:
+    _exercises: LabExercises
+    _name: str
+    _tests: Optional[TestSuite]
+
+    def __init__(self, exercises: LabExercises, name) -> None:
+        self._exercises = exercises
+        self._name = name
+        self._tests = None
+
+    @property
+    def exercises(self) -> LabExercises:
+        return self._exercises
+
+    @property
+    def id(self) -> str:
+        return self._name
+
+    @property
+    def full_id(self) -> str:
+        return f"{self._exercises.full_id}.{self.id}"
+
+    @property
+    def name(self) -> str:
+        return self.id
+
+    @property
+    def full_name(self) -> str:
+        exercises = self.exercises
+        lab = exercises.lab
+        return f"{lab.name} ({exercises.name}): {self.name} exercise"
+
+    @property
+    def tests_full_id(self) -> str:
+        return f"lib.{self.full_id}.tests"
+
+    @property
+    def tests(self) -> TestSuite:
+        if self._tests is None:
+            try:
+                tests_module = import_module(self.tests_full_id)
+                self._tests = TestSuite(
+                    (test.id, test) for test in tests_module.__dict__.values() if type(test) is Test
+                )
+            except ModuleNotFoundError:
+                self._tests = TestSuite(())
+        return self._tests
+
+
+LABS = Labs(
+    (
+        (
+            "maths",
+            "player",
+            "pair",
+        ),
+        (),
+    ),
+    (
+        (
+            "singly_linked_list",
+            "doubly_linked_list",
+            "static_array_list",
+        ),
+        (
+            "logger",
+            "character_generator",
+        ),
+    ),
+    (
+        (
+            "dynamic_array_list",
+            "circular_dynamic_array_list",
+            "linked_stack",
+            "array_stack",
+            "linked_queue",
+            "array_queue",
+        ),
+        (
+            "linked_deque",
+            "array_deque",
+            "shunting_yard",
+            "virtual_stack_machine",
+        ),
+    ),
+)

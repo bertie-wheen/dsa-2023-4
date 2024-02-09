@@ -5,12 +5,12 @@ python labs
 
  1. [Getting Ready](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab1/README.md)
  2. [Lists](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab2/README.md)
- 3. More Lists, Stacks & Queues
- 4. Hash Maps & Sets
- 5. Binary Trees & Traversals
- 6. Binary Search Trees & AVL Trees
- 7. Binary Heaps
- 8. Priority Queues
+ 3. [More Lists, Stacks & Queues](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab3/README.md)
+ 4. Sorting and Array Maps
+ 5. Hash Maps
+ 6. Binary Trees & Traversals
+ 7. Binary Search Trees & AVL Trees
+ 8. Binary Heaps & Priority Queues
  9. Graphs
 10. Depth- & Breadth-first Search
 11. Dijkstra's Algorithm & A* Search
