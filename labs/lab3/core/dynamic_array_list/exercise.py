@@ -65,6 +65,7 @@ class DynamicArrayList(Base[Item]):
         elif capacity < length:
             raise ValueError
         list = DynamicArrayList(capacity=capacity)
+        list._length = length
         for index in range(length):
             item = array.get_at(index)
             list.set_at(index, item)
