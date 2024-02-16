@@ -18,6 +18,6 @@ few hours in isn't cause for despair, but is actually expected, as the last four
 1. [Dynamic Array Lists](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab3/core/dynamic_array_list/README.md)
 2. [Circular Dynamic Array Lists](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab3/core/circular_dynamic_array_list/README.md)
 3. [Linked Stacks](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab3/core/linked_stack/README.md)
-4. [Linked Queues](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab3/core/linked_queue/README.md)
-5. [Array Stacks](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab3/core/array_stack/README.md)
+4. [Array Stacks](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab3/core/array_stack/README.md)
+5. [Linked Queues](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab3/core/linked_queue/README.md)
 6. [Array Queues](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab3/core/array_queue/README.md)
