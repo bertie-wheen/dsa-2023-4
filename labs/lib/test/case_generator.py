@@ -139,6 +139,22 @@ class TestCaseGenerator:
             item_type = generic_args[0]
             length = self._generate_length(*annotations)
             return iter(tuple(self._generate(item_type) for _ in range(length)))
+        if generic_type is tuple:
+            return tuple(map(self._generate, generic_args))
+        if generic_type is list:
+            return list(self._generate_generic(Iterator, generic_args, *annotations))
+        if generic_type is set:
+            for annotation in annotations:
+                match annotation:
+                    case GT(count):
+                        count = self._specify_value(count)
+                        if count >= 1:
+                            raise NotImplementedError
+                    case GE(count) | EQ(count):
+                        count = self._specify_value(count)
+                        if count > 1:
+                            raise NotImplementedError
+            return set(self._generate_generic(Iterator, generic_args, *annotations))
         if hasattr(generic_type, "build") and callable(generic_type.build):
             return generic_type.build(self._generate_generic(Iterator, generic_args, *annotations))
         raise TypeError

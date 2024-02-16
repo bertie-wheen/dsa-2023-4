@@ -1,13 +1,71 @@
 from collections.abc import Iterator
 from importlib import import_module
-from typing import Optional
+from typing import Optional, TypeAlias
 
-from lib.test import Test
-from lib.test.suite import TestSuite
+import lib.test
+import lib.test.suite
 
 
 class Labs:
+    _instance: Optional["Labs"] = None
+
     _labs: list["Lab"]
+
+    @staticmethod
+    def instance() -> "Labs":
+        if Labs._instance is None:
+            Labs._instance = Labs(
+                (
+                    (
+                        "maths",
+                        "player",
+                        "pair",
+                    ),
+                    (),
+                ),
+                (
+                    (
+                        "singly_linked_list",
+                        "doubly_linked_list",
+                        "static_array_list",
+                    ),
+                    (
+                        "logger",
+                        "character_generator",
+                    ),
+                ),
+                (
+                    (
+                        "dynamic_array_list",
+                        "circular_dynamic_array_list",
+                        "linked_stack",
+                        "array_stack",
+                        "linked_queue",
+                        "array_queue",
+                    ),
+                    (
+                        "linked_deque",
+                        "array_deque",
+                        "shunting_yard",
+                        "virtual_stack_machine",
+                    ),
+                ),
+                (
+                    (
+                        "selection_sort",
+                        "insertion_sort",
+                        "merge_sort",
+                        "binary_search",
+                        "unsorted_array_map",
+                        "sorted_array_map",
+                    ),
+                    (
+                        "scrabble",
+                        "memoization",
+                    ),
+                ),
+            )
+        return Labs._instance
 
     def __init__(self, *labs) -> None:
         self._labs = [Lab(self, week, core, plus) for week, (core, plus) in enumerate(labs, start=1)]
@@ -17,8 +75,10 @@ class Labs:
         return "labs"
 
     @property
-    def tests(self) -> TestSuite:
-        return TestSuite((f"{lab.id}.{test_name}", test) for lab in self for test_name, test in lab.tests)
+    def tests(self) -> "lib.test.suite.TestSuite":
+        return lib.test.suite.TestSuite(
+            (f"{lab.id}.{test_name}", test) for lab in self for test_name, test in lab.tests
+        )
 
     @property
     def name(self) -> str:
@@ -52,7 +112,7 @@ class Labs:
                         return exercise
         raise KeyError
 
-    def test(self, test_full_id: str) -> Test:
+    def test(self, test_full_id: str) -> "lib.test.Test":
         for full_id, test in self.tests:
             if full_id == test_full_id:
                 return test
@@ -100,8 +160,8 @@ class Lab:
         return self._plus
 
     @property
-    def tests(self) -> TestSuite:
-        return TestSuite(
+    def tests(self) -> "lib.test.suite.TestSuite":
+        return lib.test.suite.TestSuite(
             (f"{exercises.id}.{test_name}", test) for exercises in self for test_name, test in exercises.tests
         )
 
@@ -148,8 +208,8 @@ class LabExercises:
         return f"{self.lab.name} ({self.name})"
 
     @property
-    def tests(self) -> TestSuite:
-        return TestSuite(
+    def tests(self) -> "lib.test.suite.TestSuite":
+        return lib.test.suite.TestSuite(
             (f"{exercise.id}.{test_name}", test) for exercise in self for test_name, test in exercise.tests
         )
 
@@ -163,7 +223,7 @@ class LabExercises:
 class Exercise:
     _exercises: LabExercises
     _name: str
-    _tests: Optional[TestSuite]
+    _tests: Optional["lib.test.suite.TestSuite"]
 
     def __init__(self, exercises: LabExercises, name) -> None:
         self._exercises = exercises
@@ -197,52 +257,16 @@ class Exercise:
         return f"lib.{self.full_id}.tests"
 
     @property
-    def tests(self) -> TestSuite:
+    def tests(self) -> "lib.test.suite.TestSuite":
         if self._tests is None:
             try:
                 tests_module = import_module(self.tests_full_id)
-                self._tests = TestSuite(
-                    (test.id, test) for test in tests_module.__dict__.values() if type(test) is Test
+                self._tests = lib.test.suite.TestSuite(
+                    (test.id, test) for test in tests_module.__dict__.values() if type(test) is lib.test.Test
                 )
             except ModuleNotFoundError:
-                self._tests = TestSuite(())
+                self._tests = lib.test.suite.TestSuite(())
         return self._tests
 
 
-LABS = Labs(
-    (
-        (
-            "maths",
-            "player",
-            "pair",
-        ),
-        (),
-    ),
-    (
-        (
-            "singly_linked_list",
-            "doubly_linked_list",
-            "static_array_list",
-        ),
-        (
-            "logger",
-            "character_generator",
-        ),
-    ),
-    (
-        (
-            "dynamic_array_list",
-            "circular_dynamic_array_list",
-            "linked_stack",
-            "array_stack",
-            "linked_queue",
-            "array_queue",
-        ),
-        (
-            "linked_deque",
-            "array_deque",
-            "shunting_yard",
-            "virtual_stack_machine",
-        ),
-    ),
-)
+Component: TypeAlias = Labs | Lab | LabExercises | Exercise

@@ -27,7 +27,8 @@ class Test:
     @property
     def full_id(self) -> str:
         if self._full_id is None:
-            for full_id, test in lib.labs.LABS.tests:
+            labs = lib.labs.Labs.instance()
+            for full_id, test in labs.tests:
                 if test is self:
                     self._full_id = full_id
                     break

@@ -6,7 +6,7 @@ from time import perf_counter_ns
 import traceback
 from typing import Any, Optional
 
-from lib.labs import LABS
+from lib.labs import Labs
 from lib.magic import are_equal, to_typed_string
 from lib.test import Test
 from lib.test.case_generator import generate_test_case
@@ -16,7 +16,7 @@ class TestRunner:
     _min_time_ns: int
     _max_time_s: Optional[float]
 
-    def __init__(self, min_time_ms: int, max_time_ms: Optional[int] = None):
+    def __init__(self, min_time_ms: int, max_time_ms: Optional[int]):
         self._min_time_ns = min_time_ms * 1_000_000
         self._max_time_s = max_time_ms and max_time_ms / 1_000
 
@@ -65,7 +65,7 @@ class TestRunner:
 
 
 def _indirect_test_runner(send_conn: Connection, test_full_id: str, case_scale: int) -> None:
-    test = LABS.test(test_full_id)
+    test = Labs.instance().test(test_full_id)
     case = generate_test_case(test, case_scale)
     if case is None:
         send_conn.send(None)

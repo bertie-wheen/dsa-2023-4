@@ -1,3 +1,4 @@
+from argparse import Namespace
 import sys
 from typing import Optional
 
@@ -8,7 +9,7 @@ from textual.message import Message
 from textual.widgets import Button, Footer, Label, ProgressBar, Rule, Tree
 from textual.widgets.tree import TreeNode
 
-from lib.labs import LABS, Lab, LabExercises, Exercise
+from lib.labs import Labs, Lab, LabExercises, Exercise
 from lib.test.runner import TestRunner
 
 
@@ -20,9 +21,10 @@ class Sidebar(ScrollableContainer):
     ]
 
     def compose(self) -> ComposeResult:
-        tree: Tree[dict] = Tree("DSA Labs", data=LABS)
+        labs = Labs.instance()
+        tree: Tree[dict] = Tree("DSA Labs", data=labs)
         tree.guide_depth = 3
-        for lab in LABS:
+        for lab in labs:
             lab_tree = tree.root.add(lab.name, data=lab)
             for exercises in lab:
                 exercises_tree = lab_tree.add(exercises.name, data=exercises)
@@ -36,6 +38,10 @@ class Sidebar(ScrollableContainer):
             node.toggle()
         node.tree.select_node(node)
         self.on_tree_node_selected(Tree.NodeSelected(node))
+
+    def select_labs(self, toggle: bool = False) -> None:
+        tree = self.query_one(Tree)
+        self.select_node(tree.root, toggle=toggle)
 
     def get_lab_node(self, lab: Lab) -> TreeNode:
         tree = self.query_one(Tree)
@@ -135,6 +141,12 @@ class DSAApp(App):
     name = ""
     path = []
 
+    args: Namespace
+
+    def __init__(self, args: Namespace) -> None:
+        self.args = args
+        super().__init__()
+
     def compose(self) -> ComposeResult:
         with Horizontal():
             yield Sidebar()
@@ -160,26 +172,17 @@ class DSAApp(App):
         yield Footer()
 
     def on_mount(self) -> None:
-        args = sys.argv[1:]
-        if len(args) != 1:
-            return
-        arg = args[0]
         sidebar = self.query_one(Sidebar)
-        if arg[0].isdigit():
-            try:
-                week = int(arg)
-                lab = LABS[week]
-                sidebar.select_exercises(lab.core, toggle=True)
-            except ValueError:
-                week = int(arg[:-1])
-                lab = LABS[week]
-                match arg[-1]:
-                    case "*":
-                        sidebar.select_lab(lab, toggle=True)
-                    case "+":
-                        sidebar.select_exercises(lab.plus, toggle=True)
-        else:
-            sidebar.select_exercise(LABS.exercise(arg))
+        component = self.args.component
+        match component:
+            case Labs():
+                sidebar.select_labs(toggle=True)
+            case Lab():
+                sidebar.select_lab(component, toggle=True)
+            case LabExercises():
+                sidebar.select_exercises(component, toggle=True)
+            case Exercise():
+                sidebar.select_exercise(component, toggle=True)
 
     def update_title(self, node: TreeNode) -> None:
         self.query_one("#title").update(node.data.full_name)
@@ -206,9 +209,7 @@ class DSAApp(App):
         was_first = True
         was_success = False
         all_success = True
-        min_time_ms = 25
-        max_time_ms = None
-        runner = TestRunner(min_time_ms, max_time_ms=max_time_ms)
+        runner = TestRunner(self.args.min_time_ms, self.args.max_time_ms)
         for name, test in tests:
             failure_reason = runner.run(test)
             if failure_reason:

@@ -45,6 +45,8 @@ def needs_no_id(thing):
         return True
     if thing_type is str:
         return True
+    if thing_type is type:
+        return True
     if issubclass(thing_type, Exception):
         return True
     if issubclass(thing_type, Iterator):
