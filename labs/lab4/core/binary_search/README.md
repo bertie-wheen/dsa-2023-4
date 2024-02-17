@@ -16,9 +16,9 @@ different. We instead implement binary search using a helper function that takes
 the subsection of the array within which the item is to be searched for. This means that when we recurse, we can
 essentially recurse on a subarray by changing these parameters. Of course, we don't want our `binary_search` function to
 take these extra parameters, but we can have `binary_search(array, item)` simply call
-`_binary_search_between(array, item, 0, array.get_length() - 1)`. (We could alternatively done without a helper function
-by using optional keyword arguments, though that would be slightly less efficient as we'd need to re-check whether
-they're `None` each time.)
+`_binary_search_between(array, item, 0, array.get_length() - 1)`. (We could alternatively have done without a helper
+function by using optional keyword arguments, though that would be slightly less efficient as we'd need to re-check
+whether they're `None` each time.)
 
 Still, everything remains much the same, the main difference being in some of the indices, since in the sliced subarrays
 they would be relative to `0`, whereas with the way we're doing it they're relative to `lower_index`.

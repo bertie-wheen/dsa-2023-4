@@ -20,7 +20,7 @@ The methods for you to implement are again:
 
 We won't say much else, other than that you should use binary search, as to say much more would remove the challenge
 from the exercise. The one thing we will say is that you shouldn't use the actual `binary_search` implementation
-from the `binary_searach` exercise, but should re-implement it (perhaps with slightly different base/final cases,
-and/or accumulating/maintaining additional information in the process). (If the `binary_search` implementation had
-been slightly more general, and/or if we were using Python slightly differently, then you could have reused that code.
-In the real world that would potentially be a good idea, but for our purposes, doing it this way is good exercise!)
+from the `binary_search` exercise, but should re-implement it (perhaps with slightly different base/final cases, and/or
+accumulating/maintaining additional information in the process). (If the `binary_search` implementation had been
+slightly more general, and/or if we were using Python slightly differently, then you could have reused that code. In the
+real world that would potentially be a good idea, but for our purposes, doing it this way is good exercise!)

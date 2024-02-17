@@ -7,8 +7,8 @@
 python labs memoization
 ```
 
-A common optimisation technique is called "memoization". The idea is to cache the results of an computation so that next
-time they can simply be looked up rather recomputed. The tradeoff is between space and time: memoization causes
+A common optimisation technique is called "memoization". The idea is to cache the results of a computation so that next
+time they can simply be looked up rather than recomputed. The tradeoff is between space and time: memoization causes
 increased memory usage, but can also dramatically improve performance.
 
 In this example, we show two implementations of a function for getting the $n$th number in the
@@ -21,7 +21,7 @@ specifically $\mathrm{O}(\phi^n)$, where $\phi = 1.618\dots$ is the
 
 The second, `fast_fibonacci`, is a memoized version of the first. All it does differently is to store the results in a
 map (`_cache`), and reuse those to avoid unnecessary recalculation. However, this change improves its time efficiency to
-$\mathrm{O}(n)$, i.e. linear from exponential - or even $\mathrm{O}(1)$ for numbers its already calculated.
+$\mathrm{O}(n)$, i.e. linear from exponential - or even $\mathrm{O}(1)$ for numbers it has already calculated.
 
 Or rather it would if our map were slightly more efficient. Were we using the sort of map we'll implement in the next
 lab, then it would be linear/constant, but using `SortedArrayMap` it's instead $\mathrm{O}(n \log_2(n))$ for new numbers
