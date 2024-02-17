@@ -70,6 +70,12 @@ Insertion sort, given the same example as we gave selection sort, runs like this
                   ^   ^<->^
 ```
 
+Again, you'll likely want to have a look at the lecture slides while implementing the exercise. Speaking of which, open
+up `exercise.py`, and try to figure it out! (Note that, though they contain pseudocode, you shouldn't just mindlessly
+transcribe it. These labs aren't marked anyway, so you'd only be cheating yourself. The point is that, even if you do
+essentially just convert the pseudocode to Python, you should have your brain switched on while you do, and in the
+process get to better understand how the algorithm works.)
+
 ---
 
 Next:

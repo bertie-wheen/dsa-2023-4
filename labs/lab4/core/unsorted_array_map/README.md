@@ -92,6 +92,10 @@ were instead using a `CircularDynamicArrayList`, `insert_first` would be just as
 right key, it removes that pair from the array list. If it reaches the end of the list without finding such a pair, it
 raises a `KeyError`.
 
+Okay, good luck! This penultimate exericise is easier than the final one, but is good for getting to grips with what the
+operations are and what they're supposed to do, ahead of improving the relatively simple/naive implementations of this
+exercise in the next.
+
 ---
 
 Next:

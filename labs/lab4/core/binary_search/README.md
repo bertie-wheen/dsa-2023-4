@@ -84,6 +84,10 @@ And now an item - `12` - that _isn't_ in the array:
            None
 ```
 
+Right, time for the exercise! Again, don't just mindlessly transcribe: think about what you're doing, and about what
+the algorithm is doing. (Hopefully that will be encouraged anyway by the slight difference in implementation style
+caused by not using slice notation.)
+
 ---
 
 Next:

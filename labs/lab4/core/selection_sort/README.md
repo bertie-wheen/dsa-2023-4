@@ -122,6 +122,9 @@ Here's how selection sort does it:
                       ^<->^
 ```
 
+If you haven't already: download the lecture slides from Canvas, open both them and `exercise.py`, and have a go
+implementing `selection_sort`!
+
 ---
 
 Next:
