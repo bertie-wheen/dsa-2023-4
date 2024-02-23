@@ -7,14 +7,14 @@ Sorted Array Maps Exercise
 """
 
 from collections.abc import Iterator
-from typing import Generic
 
+from lib.base import Base
 from lib.type_vars import Key, Value
 
 from lab2.core.static_array_list import StaticArrayList
 
 
-class SortedArrayMap(Generic[Key, Value]):
+class SortedArrayMap(Base[Key, Value]):
     _array_list: StaticArrayList[tuple[Key, Value]]
 
     def __init__(self) -> None:
