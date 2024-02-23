@@ -199,6 +199,8 @@ def to_string(thing: Any) -> str:
             return to_string(thing.parenthesis)
         case "CommaToken":
             return ""
+        case "HashFunction":
+            return members_to_string(thing, "a", "b", "size")
     if isinstance(thing, Enum):
         return thing.name.title().replace("_", " ")
     if hasattr(thing, "iterator") and isinstance(thing.iterator, Callable):
@@ -262,6 +264,8 @@ def are_equal(thing_a: Any, thing_b: Any) -> bool:
             return members_are_equal(thing_a, thing_b, "parenthesis")
         case "CommaToken":
             return True
+        case "HashFunction":
+            return members_are_equal(thing_a, thing_b, "a", "b", "size")
     # if isinstance(thing_a, Iterable):
     #     return are_equal(iter(thing_a), iter(thing_b))
     if hasattr(thing_a, "iterator") and isinstance(thing_a.iterator, Callable):

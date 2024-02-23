@@ -64,6 +64,14 @@ class Labs:
                         "memoization",
                     ),
                 ),
+                (
+                    (
+                        "hash_function",
+                        "chaining_hash_map",
+                        "probing_hash_map",
+                    ),
+                    (),
+                ),
             )
         return Labs._instance
 

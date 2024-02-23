@@ -192,7 +192,10 @@ class TestCaseGenerator:
         return len(value)
 
     def _argument(self, argument_name: str) -> Any:
-        index = next(index for index, name in enumerate(self._test.parameters.names) if name == argument_name)
+        try:
+            index = next(index for index, name in enumerate(self._test.parameters.names) if name == argument_name)
+        except StopIteration:
+            assert False, f"test {self._test.full_id} has no argument called {argument_name}, but it was referenced in an annotation"
         return self._case[index]
 
 
