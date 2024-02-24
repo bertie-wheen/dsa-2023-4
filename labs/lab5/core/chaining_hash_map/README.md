@@ -26,7 +26,7 @@ specifically: You'll need to call it in `insert` (don't worry, if you do it righ
 sounds, i.e. it shouldn't cause an infinite loop) when the key of the mapping to be inserted isn't already in the map,
 and therefore inserting it will increment the map's length to a point where the load factor exceeds the given limit.
 That limit is the "maximum load factor", chosen when creating the map. As a reminder, the load factor is
-$\frac{length}{chain\_count}$ - so, if increasing the length will cause the ratio to become too large, then increasing
+$\frac{length}{chain{\_}count}$ - so, if increasing the length will cause the ratio to become too large, then increasing
 the number of chains can bring it back below the maximum. As with dynamic array lists, there are other amounts you might
 choose to increase it by, but for the purposes of this module you should just double the chain count. Also similarly to
 dynamic array lists, if `remove`-ing a mapping, and thus decrementing the length, brings the load factor down below some

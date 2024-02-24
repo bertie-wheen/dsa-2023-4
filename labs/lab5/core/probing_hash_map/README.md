@@ -17,7 +17,7 @@ However, the array's items are quite different. Instead of being `DoublyLinkedLi
 `tuple[Key, Value] | EmptyCell`s. That is, they're either a key/value pair, or they're an empty cell.
 
 We've defined a type `EmptyCell` to represent the two different states an empty cell can be in. In the lectures, these
-are described as "empty" or "available". In these labs, we refer to them as "never used" or "now unused" repspectively.
+are described as "empty" or "available". In these labs, we refer to them as "never used" or "now unused" respectively.
 (This is just to help you keep it clearer in your head what the distinction is while you're implementing the methods.)
 
 The type `EmptyCell` is an "enum", short for "enumeration" or "enumerated type". All that means is that it's a type
