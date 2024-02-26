@@ -13,7 +13,7 @@ $H = \{h_{a,b} \ |\  a, b \in \{0, \dots p - 1\} \text{ with } a \ne 0\}$
 
 where
 
-$h_{a,b}(k) = ((a k + b \mod p) \mod N)$
+$h_{a,b}(k) = (((a k + b) \mod p) \mod N)$
 
 An instance of the `HashFunction` class is then a specific $h_{a,b}$. As in the lectures, we pick a hash function at random from the family by randomly choosing the $a$ and $b$ parameters. The instance generates these upon creation, and stores them in `self._a` and `self._b` member variables.
 
@@ -23,7 +23,7 @@ We've fixed $p$ to be the prime $2^{100} - 1$, but this is somewhat arbitrary. A
 
 What you're to do is to implement the `hash` method, which you should do by using first `to_int`, then the given formula:
 
-$h_{a,b}(k) = ((a k + b \mod p) \mod N)$
+$h_{a,b}(k) = (((a k + b) \mod p) \mod N)$
 
 Note: This exercise is used in the other two exercises. So, if you've spent a while failing to figure it out, and want to have a go at them, just implement it using `return to_int(thing) % self._size` for now and come back to it later.
 
