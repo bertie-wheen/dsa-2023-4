@@ -9,7 +9,7 @@ python labs hash_function
 
 In this exercise, we implement the family of hash functions described in the lectures as universal. That is, the family
 
-$H = \{h_{a,b} \ |\  a, b \in \{0, \dots p - 1\} \text{ with } a \ne 0\}$
+$H = \\{h_{a,b} \ |\  a, b \in \{0, \dots p - 1\} \text{ with } a \ne 0\\}$
 
 where
 
