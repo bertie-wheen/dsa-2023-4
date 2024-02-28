@@ -4,6 +4,7 @@
 
 ### [Entity-Component-System](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab5/plus/ecs/README.md)
 ```shell
+pip install pygame
 python labs ecs
 ```
 
