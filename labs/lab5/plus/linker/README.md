@@ -448,5 +448,5 @@ returns a machine code - well, bytecode (tomato tomato) - program that we can gi
 to execute!
 
 (If you enjoy this sort of thing, there are a few fun little example functions written in this made-up assembly
-language that you might like to try to understand. Better, you might like to write your own, our create your own
+language that you might like to try to understand. Better, you might like to write your own, or create your own
 instruction set!)
