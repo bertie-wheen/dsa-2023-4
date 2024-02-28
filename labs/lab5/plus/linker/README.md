@@ -182,7 +182,7 @@ else:
     print("n", end="")
 print(".", end="")
 ```
-and will print `y.`
+and will print `y.`.
 
 Note that `J` is an unconditional jump, which simply pops the top item off the stack, interprets it as an address, and
 jumps there.
@@ -223,7 +223,7 @@ for i in range(4):
     print(i, end="")
 print(".", end="")
 ```
-and will print `0123.`
+and will print `0123.`.
 
 Note that to print the numbers as characters representing those numbers, we use them as an offset to the character
 `'0'`, taking advantage of the fact that in ASCII digits' character codes are consecutive and in order. (The character
@@ -236,7 +236,7 @@ Usually though, we don't use `J` or `JC`, but rather slightly more specialised i
 these aren't always included.)
 
 `CALL` works much like `J`, but before jumping to the given address, it pushes the instruction pointer - the address of
-the next instruction to be executed - onto a second stack, which we'll refer to as the return address stack.
+the next instruction to be executed - onto a second stack, the return address stack.
 
 `RET` then works by popping the top item off the return address stack, and jumping to that address.
 
@@ -408,7 +408,7 @@ program = assemble_and_link(source_codes)
 ```
 
 (The idea is, though, that we could have assembled `add3` and `add4` once, ahead of time, and then used them and re-used
-them in multiple programs without having to re-assumble them each time.)
+them in multiple programs without having to re-assemble them each time.)
 
 The output, `program`, will then be the machine code from earlier, i.e.:
 ```
