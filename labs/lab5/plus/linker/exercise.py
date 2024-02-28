@@ -6,8 +6,6 @@ Lab 5: Hash Maps
 Linkers Exercise
 """
 
-from collections.abc import Iterator
-
 from lib.array import Array
 from lib.errors import EmptyCollectionError
 from lib.string import split_on_whitespace
@@ -21,6 +19,7 @@ def assemble(source_code: str) -> Array[int | str]:
     """
     Convert the given assembly code to object code.
 
+    :parameter source_code: assembly code
     :returns: object code
     :raises ValueError: if an instruction is unknown or is a ``PUSH`` with no argument
     """
@@ -59,9 +58,9 @@ def link(object_codes: Queue[Array[int | str]]) -> Array[int]:
     """
     Link the given object codes into one machine code program.
 
+    :parameter object_codes: zero or more object codes
     :returns: machine code
-    :raises ValueError: if duplicate label
-    :raises KeyError: if unknown label
+    :raises ValueError: if a label is a duplicate (defined twice) or unknown (referenced but not defined)
     """
     label_addresses = Map[str, int]()
     current_address = 0
