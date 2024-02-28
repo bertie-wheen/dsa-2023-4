@@ -70,7 +70,10 @@ class Labs:
                         "chaining_hash_map",
                         "probing_hash_map",
                     ),
-                    (),
+                    (
+                        "ecs",
+                        "linker",
+                    ),
                 ),
             )
         return Labs._instance

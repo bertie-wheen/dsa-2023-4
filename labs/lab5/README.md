@@ -72,3 +72,5 @@ and exercise name to whatever you're working on), after which you'll be able to 
   - Chaining Hash Maps
   - Probing Hash Maps
 - [Plus](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab5/plus/README.md)
+  - Entity-Component-System
+  - Linkers

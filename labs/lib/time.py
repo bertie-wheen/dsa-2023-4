@@ -1,10 +1,10 @@
-from time import time_ns
+from time import time
 
 
-def get_time() -> int:
+def get_time() -> float:
     """
-    Get the current UTC time in nanoseconds since the epoch.
+    Get the current UTC time in seconds since the epoch.
 
-    :returns: the number of nanoseconds since 1970-01-01 00:00
+    :returns: the number of seconds since 1970-01-01 00:00
     """
-    return time_ns()
+    return time()
