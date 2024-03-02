@@ -160,9 +160,9 @@ defined on a subtree, there are three things to iterate over:
 - (recursively) its right subtree, if there is one
 
 The orders are then generally described by the order in which these are done. For example, pre-order is described as
-"node, left, right" or "N L R" - but since we're talking about subtrees, we'll describe it as
-"root-left-right". Either way, what that means is that the subtree's item comes first in the iteration/traversal, then
-its left subtree and its descendants (in the same manner), then (similarly) its right subtree (and its descendants).
+"node, left, right" or "N L R" - but since we're talking about subtrees, we'll describe it as "root-left-right". Either
+way, what that means is that the subtree's item comes first in the iteration/traversal, then its left subtree and its
+descendants (in the same manner), then (similarly) its right subtree (and its descendants).
 
 Using the tree above as an example (shown again to aid comparison), the types are:
 
@@ -393,10 +393,11 @@ we'll often be able to stop early before we get all the way to the root, because
 actually changed. (To understand this, think about how height is calculated.) The bad news is that length changes always
 propagate the whole way, up to and including the root. The other bad news is that for both of these, length _and_
 height, this updating is therefore not constant time, and is instead linear in the level (because the level corresponds
-to how many ancestors we have). (For height there's again the silver lining that it's $\mathrm{O}(level)$ only in the
-worst case, and in the best case is $\mathrm{O}(1)$, but we're updating both of them, so the combined best case is
-$\mathrm{O}(level)$.) The really bad news is that this means our `insert_*` and `remove_*` methods, which would
-otherwise have been constant-time, are now linear.
+to how many ancestors we have - they're not exactly the same, as nodes/subtrees are considered their own ancestors, so
+$level = ancestor\\_count - 1$, but they're equivalent for the purposes of asymptotic complexity). (For height there's
+again the silver lining that it's $\mathrm{O}(level)$ only in the worst case, and in the best case is $\mathrm{O}(1)$,
+but we're updating both of them, so the combined best case is $\mathrm{O}(level)$.) The really bad news is that this
+means our `insert_*` and `remove_*` methods, which would otherwise have been constant-time, are now linear.
 
 That's the cost, but as we'll explain in a moment it's not necessarily such an awful cost, and we do gain relatively
 well from it. The gain is, of course, that `get_length` and `get_height` can now go from linear- to constant-time. This
