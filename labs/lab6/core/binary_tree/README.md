@@ -160,7 +160,7 @@ defined on a subtree, there are three things to iterate over:
 - (recursively) its right subtree, if there is one
 
 The orders are then generally described by the order in which these are done. For example, pre-order is described as
-"node, left, right" or "N L R" - but since we're since we're talking about subtrees, we'll describe it as
+"node, left, right" or "N L R" - but since we're talking about subtrees, we'll describe it as
 "root-left-right". Either way, what that means is that the subtree's item comes first in the iteration/traversal, then
 its left subtree and its descendants (in the same manner), then (similarly) its right subtree (and its descendants).
 
@@ -383,7 +383,7 @@ operation.)
 Later, when we're running `insert_left`/`insert_right`/`remove_left`/`remove_right`, the length/height might change
 (the length certainly will, the height merely might), and we'll therefore need to update our `_length`/`_height`
 variables. This wouldn't necessarily be a problem, as we could again recompute them in constant time. _However_,
-the it's not just the subtree you're calling the `insert_*`/`remove_*` method on that's affected, but also its
+it's not just the subtree you're calling the `insert_*`/`remove_*` method on that's affected, but also its
 ancestors. We're updating because one of our child subtrees changed, but if we change, then our parent, to whom we're a
 child, will need to do the same - and if _it_ changes, then what about _its_ parent? And on and on, all the way to the
 root.
@@ -435,7 +435,7 @@ Illustrated:
 
 Both after removing the subtree, and after reinserting it, we'd have to update all the levels (all $length$ of them - in
 this case, 4). We could come up with additional "move" methods that for when we want to remove and reinsert a subtree
-somewheere else, and and this would mean we only have to update them all once rather than twice, but that doesn't change
+somewheere else, and this would mean we only have to update them all once rather than twice, but that doesn't change
 the asymptotics. The cost would still be $\mathrm{O}(length)$, which (as we mentioned) is usually quite a bit more than
 the $\mathrm{O}(level)$ incurred in trying to get an efficient `get_length` and/or `get_height`.
 
