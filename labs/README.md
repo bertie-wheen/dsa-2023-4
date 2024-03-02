@@ -8,7 +8,7 @@ python labs
  3. [More Lists, Stacks & Queues](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab3/README.md)
  4. [Sorting & Array Maps](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab4/README.md)
  5. [Hash Maps](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab5/README.md)
- 6. Binary Trees & Traversals
+ 6. [Binary Trees & Traversals](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab6/README.md)
  7. Binary Search Trees & AVL Trees
  8. Binary Heaps & Priority Queues
  9. Graphs

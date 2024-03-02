@@ -22,11 +22,16 @@ class TestRunner:
 
     def run(self, test: Test) -> str:
         scale = 0
+        simple = not test.parameters
+        first = True
         start_time_ns = perf_counter_ns()
-        while perf_counter_ns() - start_time_ns < self._min_time_ns:
+        while first or perf_counter_ns() - start_time_ns < self._min_time_ns:
+            first = False
             result = self._run_case(test, scale)
             if result:
                 return result
+            if simple:
+                break
             if scale == 0:
                 scale = 1
             else:

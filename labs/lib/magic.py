@@ -123,6 +123,17 @@ def is_in(thing: Item, things: Iterable[Item]) -> bool:
     return False
 
 
+def binary_subtree_to_string(subtree) -> str:
+    if subtree is None:
+        return ""
+    item = to_string(subtree.get_item())
+    if subtree.is_leaf():
+        return item
+    left = binary_subtree_to_string(subtree.get_left())
+    right = binary_subtree_to_string(subtree.get_right())
+    return f"({left}) {item} ({right})"
+
+
 # noinspection PyProtectedMember
 def to_string(thing: Any) -> str:
     match type(thing).__name__:
@@ -201,6 +212,10 @@ def to_string(thing: Any) -> str:
             return ""
         case "HashFunction":
             return members_to_string(thing, "a", "b", "size")
+        case "BinaryTree":
+            return to_string(thing._root) if thing._root else ""
+        case "BinarySubtree":
+            return binary_subtree_to_string(thing)
     if isinstance(thing, Enum):
         return thing.name.title().replace("_", " ")
     if hasattr(thing, "iterator") and isinstance(thing.iterator, Callable):
@@ -266,6 +281,10 @@ def are_equal(thing_a: Any, thing_b: Any) -> bool:
             return True
         case "HashFunction":
             return members_are_equal(thing_a, thing_b, "a", "b", "size")
+        case "BinaryTree":
+            return members_are_equal(thing_a, thing_b, "root")
+        case "BinarySubtree":
+            return thing_a is thing_b
     # if isinstance(thing_a, Iterable):
     #     return are_equal(iter(thing_a), iter(thing_b))
     if hasattr(thing_a, "iterator") and isinstance(thing_a.iterator, Callable):
