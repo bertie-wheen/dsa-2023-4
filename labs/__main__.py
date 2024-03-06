@@ -13,7 +13,7 @@ except KeyError:
     parser.print_help()
     sys.exit(1)
 
-if args.component.full_id == "labs.lab5.plus.ecs":
+if args.component is not None and args.component.full_id == "labs.lab5.plus.ecs":
     from lab5.plus.ecs import Pong
 
     pong = Pong()
