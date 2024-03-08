@@ -34,11 +34,11 @@ class SortedArrayMap(Base[Key, Value]):
         """
         Build an sorted array map containing the given key/value mappings.
 
-        +--------+---------------------------------+
-        | Time:  | O(build(mappings).get_length()) |
-        +--------+---------------------------------+
-        | Space: | O(build(mappings).get_length()) |
-        +--------+---------------------------------+
+        +--------+----------------------------------------------------------------------+
+        | Time:  | O(build(mappings).get_length() * log2(build(mappings).get_length())) |
+        +--------+----------------------------------------------------------------------+
+        | Space: | O(build(mappings).get_length())                                      |
+        +--------+----------------------------------------------------------------------+
 
         :parameter items: an iterator of initial mappings
         :returns: an sorted array map with those mappings
@@ -197,7 +197,6 @@ class SortedArrayMap(Base[Key, Value]):
     def iterator(self) -> Iterator[tuple[Key, Value]]:
         """
         Get an iterator over the key/value pairs in this map.
-        The iteration order is unspecified.
 
         +--------+----------------------+
         | Time:  | O(self.get_length()) |
@@ -205,14 +204,13 @@ class SortedArrayMap(Base[Key, Value]):
         | Space: | O(1)                 |
         +--------+----------------------+
 
-        :returns: an iterator over the map's items
+        :returns: an iterator over the map's items, sorted by key
         """
         return self._array_list.iterator()
 
     def keys_iterator(self) -> Iterator[Key]:
         """
         Get an iterator over the keys in this map.
-        The iteration order is unspecified.
 
         +--------+----------------------+
         | Time:  | O(self.get_length()) |
@@ -220,7 +218,7 @@ class SortedArrayMap(Base[Key, Value]):
         | Space: | O(1)                 |
         +--------+----------------------+
 
-        :returns: an iterator over the map's keys
+        :returns: an iterator over the map's keys, in sorted order
         """
         for key, value in self.iterator():
             yield key

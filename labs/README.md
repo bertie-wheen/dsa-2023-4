@@ -9,11 +9,11 @@ python labs
  4. [Sorting & Array Maps](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab4/README.md)
  5. [Hash Maps](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab5/README.md)
  6. [Binary Trees & Traversals](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab6/README.md)
- 7. Binary Search Trees & AVL Trees
- 8. Binary Heaps & Priority Queues
- 9. Graphs
-10. Depth- & Breadth-first Search
-11. Dijkstra's Algorithm & A* Search
+ 7. [Binary Search Trees](https://github.com/bertie-wheen/dsa-2023-4/blob/trunk/labs/lab7/README.md)
+ 8. AVL Trees & Priority Queues
+ 9. More Priority Queues & Binary Heaps
+10. Graphs & Search
+11. More Graph Search Algorithms
 
 There are 11 labs, corresponding one-to-one with the 11 weeks of this module.
 

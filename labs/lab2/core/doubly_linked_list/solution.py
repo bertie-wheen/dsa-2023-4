@@ -6,7 +6,6 @@ Lab 2: Lists
 Doubly-linked Lists Solution
 """
 
-
 from collections.abc import Iterator
 from typing import Optional
 
@@ -486,8 +485,8 @@ class DoublyLinkedNode(Base[Item]):
 
         :parameter list: the doubly-linked list containing this item
         :parameter item: the item this doubly-linked node contains
-        :parameter previous_node: the previous node, if there is one (default None)
-        :parameter next_node: the next node, if there is one (default None)
+        :parameter previous_node: the previous node, if there is one (default ``None``)
+        :parameter next_node: the next node, if there is one (default ``None``)
         """
         self._list = list
         self._item = item

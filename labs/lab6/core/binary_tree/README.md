@@ -383,10 +383,9 @@ operation.)
 Later, when we're running `insert_left`/`insert_right`/`remove_left`/`remove_right`, the length/height might change
 (the length certainly will, the height merely might), and we'll therefore need to update our `_length`/`_height`
 variables. This wouldn't necessarily be a problem, as we could again recompute them in constant time. _However_,
-it's not just the subtree you're calling the `insert_*`/`remove_*` method on that's affected, but also its
-ancestors. We're updating because one of our child subtrees changed, but if we change, then our parent, to whom we're a
-child, will need to do the same - and if _it_ changes, then what about _its_ parent? And on and on, all the way to the
-root.
+it's not just the subtree you're calling the `insert_*`/`remove_*` method on that's affected, but also its ancestors.
+We're updating because one of our child subtrees changed, but if we change, then our parent, to whom we're a child, will
+need to do the same - and if _it_ changes, then what about _its_ parent? And on and on, all the way to the root.
 
 The good news is that when we're updating us, then our parent, then our parent's parent, etc, for the height at least
 we'll often be able to stop early before we get all the way to the root, because at some point the height won't have
@@ -436,9 +435,9 @@ Illustrated:
 
 Both after removing the subtree, and after reinserting it, we'd have to update all the levels (all $length$ of them - in
 this case, 4). We could come up with additional "move" methods that for when we want to remove and reinsert a subtree
-somewheere else, and this would mean we only have to update them all once rather than twice, but that doesn't change
-the asymptotics. The cost would still be $\mathrm{O}(length)$, which (as we mentioned) is usually quite a bit more than
-the $\mathrm{O}(level)$ incurred in trying to get an efficient `get_length` and/or `get_height`.
+somewhere else, and this would mean we only have to update them all once rather than twice, but that doesn't change the
+asymptotics. The cost would still be $\mathrm{O}(length)$, which (as we mentioned) is usually quite a bit more than the
+$\mathrm{O}(level)$ incurred in trying to get an efficient `get_length` and/or `get_height`.
 
 There are sure to be use-cases where this would be a worthwhile tradeoff, but (a) relatively rare ones and (b) the
 important thing is the higher-level point about how trying to improve efficiencies in one place can worsen them in

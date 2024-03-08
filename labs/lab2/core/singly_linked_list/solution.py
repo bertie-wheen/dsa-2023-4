@@ -516,7 +516,7 @@ class SinglyLinkedNode(Base[Item]):
 
         :parameter list: the singly-linked list containing this item
         :parameter item: the item this singly-linked node contains
-        :parameter next_node: the next node, if there is one (default None)
+        :parameter next_node: the next node, if there is one (default ``None``)
         """
         self._list = list
         self._item = item

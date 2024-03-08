@@ -52,7 +52,7 @@ Soviet Union, as well as some older computers, including the legendary
 The "shunting yard" algorithm is a way to convert expressions in infix form into postfix form.
 
 [Wikipedia](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) describes it in pseudocode as:
-```java
+```
 while there are tokens to be read:
     read a token
     if the token is:

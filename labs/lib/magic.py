@@ -224,6 +224,9 @@ def to_string(thing: Any) -> str:
         return repr(thing)
     if isinstance(thing, Iterator) and not isinstance(thing, Generator):
         return ", ".join(map(to_typed_string, copy(thing)))
+    match thing:
+        case tuple() | list() | set():
+            return ", ".join(map(to_typed_string, thing))
     if isinstance(thing, Iterable):
         return "..."
         # return ", ".join(map(to_typed_string, thing))

@@ -95,8 +95,8 @@ class VirtualStackMachine(Base):
 
         :parameter bytecode: the bytecode
         :parameter instruction_pointer: the initial value of the instruction pointer (default 0)
-        :parameter values: an optional iterable of initial values, top-first (default None)
-        :parameter return_addresses: an optional iterable of initial return addresses, top-first (default None)
+        :parameter values: an optional iterable of initial values, top-first (default ``None``)
+        :parameter return_addresses: an optional iterable of initial return addresses, top-first (default ``None``)
         """
         self._bytecode = bytecode
         self._instruction_pointer = instruction_pointer
