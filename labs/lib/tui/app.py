@@ -109,7 +109,7 @@ class Sidebar(ScrollableContainer):
         root.expand_all()
         for lab_tree in root.children:
             for sub_tree in lab_tree.children:
-                if sub_tree.data == "plus":
+                if not sub_tree.data.is_core:
                     sub_tree.collapse()
 
     def action_show_labs(self) -> None:
