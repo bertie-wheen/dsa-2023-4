@@ -7,7 +7,7 @@ from lib.test.annotations import *
 from lib.type_vars import Key, Value
 
 from lab3.core.dynamic_array_list import DynamicArrayList
-from lab4.core.unsorted_array_map import UnsortedArrayMap
+from lab4.core.merge_sort import merge_sort
 from lab7.core.binary_search_tree.exercise import BinarySearchTree
 
 
@@ -321,3 +321,54 @@ def remove_all_and_always_is_sorted(
             break
     yield True
     yield always_sorted
+
+
+@Test
+def get_minimum_key(
+    mappings: Annotated[Array[tuple[Key, Value]], GE(1)],
+):
+    minimum_key = min(key for key, value in mappings.iterator())
+    bst = BinarySearchTree.build(mappings.iterator())
+    yield minimum_key
+    yield bst.get_minimum_key()
+
+
+@Test
+def get_maximum_key(
+    mappings: Annotated[Array[tuple[Key, Value]], GE(1)],
+):
+    maximum_key = max(key for key, value in mappings.iterator())
+    bst = BinarySearchTree.build(mappings.iterator())
+    yield maximum_key
+    yield bst.get_maximum_key()
+
+
+@Test
+def get_previous_key(
+    keys: Annotated[set[Key], GE(2)],
+    values: Annotated[Iterator[Value], EQ("keys")],
+    index: Annotated[int, GE(1), LT("keys")],
+):
+    mappings = Array.build(zip(keys, values))
+    bst = BinarySearchTree.build(mappings.iterator())
+    merge_sort(mappings)
+    key, value = mappings.get_at(index)
+    previous_key, previous_value = mappings.get_at(index - 1)
+    yield previous_key
+    yield bst.get_previous_key(key)
+
+
+@Test
+def get_next_key(
+    keys: Annotated[set[Key], GE(2)],
+    values: Annotated[Iterator[Value], EQ("keys")],
+    next_index: Annotated[int, GE(1), LT("keys")],
+):
+    mappings = Array.build(zip(keys, values))
+    bst = BinarySearchTree.build(mappings.iterator())
+    merge_sort(mappings)
+    key, value = mappings.get_at(next_index - 1)
+    next_key, next_value = mappings.get_at(next_index)
+    yield next_key
+    yield bst.get_next_key(key)
+

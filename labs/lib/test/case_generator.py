@@ -1,8 +1,9 @@
 from collections.abc import Iterator
 from copy import copy
+from math import prod
 import random
 from string import printable
-from types import GenericAlias
+from types import GenericAlias, NoneType
 from typing import Annotated, Any, Optional, TypeVar, get_args, get_origin
 
 from lib.test import Test
@@ -134,6 +135,23 @@ class TestCaseGenerator:
     def _generate_char(self) -> str:
         return random.choice(printable)
 
+    def _max_distinct_value_count(self, generated_type: Any) -> Optional[int]:
+        if generated_type is NoneType:
+            return 1
+        if generated_type is bool:
+            return 2
+        if type(generated_type) is GenericAlias:
+            generic_type = get_origin(generated_type)
+            generic_args = get_args(generated_type)
+            if generic_type is tuple:
+                arg_maxs = list(map(self._max_distinct_value_count, generic_args))
+                if not any(map(lambda arg_max: arg_max is None, arg_maxs)):
+                    return prod(arg_maxs)
+            if generic_type is set:
+                item_type = generic_args[0]
+                return self._max_distinct_value_count(item_type)
+        return None
+
     def _generate_generic(self, generic_type: Any, generic_args: Any, *annotations: Any) -> Any:
         if generic_type is Iterator:
             item_type = generic_args[0]
@@ -144,17 +162,38 @@ class TestCaseGenerator:
         if generic_type is list:
             return list(self._generate_generic(Iterator, generic_args, *annotations))
         if generic_type is set:
+            item_type = generic_args[0]
+            min_min_distinct = None
+            max_distinct = self._max_distinct_value_count(item_type)
             for annotation in annotations:
+                min_distinct = None
                 match annotation:
                     case GT(count):
-                        count = self._specify_value(count)
-                        if count >= 1:
-                            raise NotImplementedError
+                        min_distinct = self._specify_value(count) + 1
                     case GE(count) | EQ(count):
-                        count = self._specify_value(count)
-                        if count > 1:
-                            raise NotImplementedError
-            return set(self._generate_generic(Iterator, generic_args, *annotations))
+                        min_distinct = self._specify_value(count)
+                if min_distinct is None:
+                    continue
+                if min_min_distinct is None or min_min_distinct < min_distinct:
+                    min_min_distinct = min_distinct
+                if max_distinct is None:
+                    continue
+                if max_distinct < min_distinct:
+                    assert False, f"can't generate {min_distinct} distinct `{item_type}`s"
+            if min_min_distinct is None:
+                return set(self._generate_generic(Iterator, generic_args, *annotations))
+            if self._scale < min_min_distinct:
+                raise ValueError
+            generated_set = set()
+            attempts = 0
+            max_length = self._scale if max_distinct is None else min(self._scale, max_distinct)
+            length = random.randint(min_min_distinct, max_length)
+            while len(generated_set) < length:
+                generated_set.add(self._generate(item_type))
+                attempts += 1
+                if attempts > ((length + 2) * 3) ** 4:
+                    raise RuntimeError(f"couldn't generate a set with enough distinct `{item_type}`s")
+            return generated_set
         if hasattr(generic_type, "build") and callable(generic_type.build):
             return generic_type.build(self._generate_generic(Iterator, generic_args, *annotations))
         raise TypeError
