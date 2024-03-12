@@ -1,1 +1,1 @@
-from .solution import *
+from .exercise import *
