@@ -83,6 +83,10 @@ class Labs:
                     ("binary_search_tree",),
                     (),
                 ),
+                (
+                    ("avl_tree",),
+                    (),
+                ),
             )
         return Labs._instance
 
